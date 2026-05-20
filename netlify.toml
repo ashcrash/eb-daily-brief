@@ -1,0 +1,7 @@
+# Netlify config for the EB daily brief dashboard.
+# Static files are served from dashboard/. A free edge function
+# (netlify/edge-functions/auth.js) password-gates every route using the
+# DASH_PASSWORD environment variable. No build step (static site).
+[build]
+  publish = "dashboard"
+  command = ""
