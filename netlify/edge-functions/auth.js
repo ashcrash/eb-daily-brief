@@ -3,6 +3,12 @@
 // Password comes from the DASH_PASSWORD env var (set via the Netlify MCP /
 // dashboard). Username is ignored; only the password is checked.
 export default async (req, context) => {
+  // Let non-GET requests (e.g. Netlify form POSTs) pass straight to Netlify's
+  // handlers — viewing the dashboard (GET/HEAD) stays password-gated below.
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    return context.next();
+  }
+
   const expected = Netlify.env.get("DASH_PASSWORD");
 
   // Fail closed: never serve content if no password is configured.
