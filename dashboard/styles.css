@@ -183,6 +183,8 @@ body.review .cbox{display:block}
 .exec,.northstar,details.section,.kpis{animation:fadeUp .45s ease both}
 .kpi,.chart-card,.cardlet,.sig{transition:transform .15s ease,border-color .15s ease}
 .kpi:hover,.chart-card:hover,.cardlet:hover,.sig:hover{transform:translateY(-2px)}
-.kpi.bad::before{animation:pulse 2.2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+/* finite attention-pulse: draws the eye on load, then settles to a steady red border
+   (infinite loop kept the compositor busy → scroll jank + battery drain on mobile) */
+.kpi.bad::before{animation:pulse 2.2s ease-in-out 4 both}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
