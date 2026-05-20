@@ -200,13 +200,22 @@ if (typeof document !== 'undefined') {
   }
   async function submitFeedback() {
     const comments = collect(); if (!comments.length) return;
-    const body = new URLSearchParams({ 'form-name': 'dashboard-feedback', 'bot-field': '', edition: String(current?.edition ?? ''), page: 'master', comments: JSON.stringify(comments) });
+    const ed = current?.edition ?? '', date = current?.date ?? '';
+    const text = `EB Dashboard feedback — Edition ${ed} (${date}):\n` + comments.map(c => `• [${c.item}] ${c.note}`).join('\n');
+    // Reliable channel: copy for pasting into the Claude chat.
+    let copied = false;
+    try { await navigator.clipboard.writeText(text); copied = true; } catch { copied = false; }
+    // Bonus channel: also submit to the Netlify form (auto-capture when available).
     try {
-      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
-      document.querySelectorAll('.cbox textarea').forEach(t => { t.value = ''; t.classList.remove('filled'); });
-      refreshBar();
-      const toast = $('.toast'); toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2200);
-    } catch { alert('Could not send feedback — check your connection and try again.'); }
+      const body = new URLSearchParams({ 'form-name': 'dashboard-feedback', 'bot-field': '', edition: String(ed), page: 'master', comments: JSON.stringify(comments) });
+      fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() }).catch(() => {});
+    } catch { /* ignore */ }
+    document.querySelectorAll('.cbox textarea').forEach(t => { t.value = ''; t.classList.remove('filled'); });
+    refreshBar();
+    const toast = $('.toast');
+    toast.textContent = copied ? 'Comments copied — paste into your Claude chat ✓' : 'Couldn’t copy — open the console to grab them';
+    if (!copied) console.log(text);
+    toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3800);
   }
   function bind() {
     $('.reviewtoggle')?.addEventListener('click', e => {
