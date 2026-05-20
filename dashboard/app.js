@@ -2,13 +2,7 @@ export function esc(s) {
   return String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
-const EB_LOGO = `<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><g>
-<path d="M22 14 Q14 14 14 22 L14 38 Q14 46 22 46 L42 46 Q46 46 46 42 L46 22 Q46 14 38 14 Z"/>
-<path d="M58 14 Q54 14 54 18 L54 42 Q54 46 58 46 L78 46 Q86 46 86 38 L86 22 Q86 14 78 14 Z"/>
-<rect x="14" y="48" width="72" height="4" rx="1"/>
-<path d="M22 54 Q14 54 14 62 L14 78 Q14 86 22 86 L38 86 Q46 86 46 78 L46 58 Q46 54 42 54 Z"/>
-<path d="M58 54 Q54 54 54 58 L54 78 Q54 86 62 86 L78 86 Q86 86 86 78 L86 62 Q86 54 78 54 Z"/>
-<rect x="48" y="14" width="4" height="72" rx="1"/></g></svg>`;
+const EB_LOGO_SRC = './eb-logo-white.png';
 
 function cbox(item) {
   return `<div class="cbox"><textarea data-item="${esc(item)}" placeholder="Note on ${esc(item)}…" rows="1"></textarea></div>`;
@@ -44,7 +38,7 @@ function chartRow(chartIds, charts) {
 
 function topbar(b) {
   return `<header class="topbar">
-    <div class="logo">${EB_LOGO}<div class="wm">Easi Breezi<small>Master Dashboard</small></div></div>
+    <div class="logo"><img class="logomark" src="${EB_LOGO_SRC}" alt="Easi Breezi" /><span class="wm-sub">Master Dashboard</span></div>
     <div class="controls">
       <select class="daypick" aria-label="Choose day"></select>
       <button class="reviewtoggle" type="button" aria-pressed="false">💬 Review</button>

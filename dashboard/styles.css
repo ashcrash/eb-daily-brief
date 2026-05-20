@@ -21,9 +21,8 @@ body{margin:0;background:
 /* ---- top bar: brand + controls ---- */
 .topbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px}
 .logo{display:flex;align-items:center;gap:11px;min-width:0}
-.logo svg{width:30px;height:30px;color:var(--eb-blue);flex:none}
-.logo .wm{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.02em;line-height:1;white-space:nowrap}
-.logo .wm small{display:block;font-family:var(--body);font-weight:400;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-top:3px}
+.logo img.logomark{height:28px;width:auto;display:block;flex:none}
+.logo .wm-sub{font-family:var(--body);font-weight:400;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);white-space:nowrap;border-left:1px solid var(--line2);padding-left:11px}
 .controls{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .controls .ed{color:var(--faint);font-size:12.5px}
 select.daypick,button.reviewtoggle{font-family:var(--body);font-size:13px;color:var(--text);background:var(--panel);
