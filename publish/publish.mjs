@@ -24,7 +24,16 @@ export function publishDashboard(brief, { repoRoot = DEFAULT_REPO_ROOT } = {}) {
   const json = JSON.stringify(brief, null, 2) + '\n';
   writeFileSync(resolve(briefsDir, 'latest.json'), json);
   writeFileSync(resolve(historyDir, `${brief.date}.json`), json);
-  return { wrote: ['dashboard/briefs/latest.json', `dashboard/briefs/history/${brief.date}.json`] };
+  // maintain history/index.json — newest first, deduped by date (powers the day picker)
+  const idxPath = resolve(historyDir, 'index.json');
+  let idx = [];
+  try { idx = JSON.parse(readFileSync(idxPath, 'utf8')); } catch { idx = []; }
+  if (!Array.isArray(idx)) idx = [];
+  idx = idx.filter(e => e && e.date !== brief.date);
+  idx.unshift({ date: brief.date, edition: brief.edition });
+  idx.sort((a, b) => (a.date < b.date ? 1 : -1));
+  writeFileSync(idxPath, JSON.stringify(idx, null, 2) + '\n');
+  return { wrote: ['dashboard/briefs/latest.json', `dashboard/briefs/history/${brief.date}.json`, 'dashboard/briefs/history/index.json'] };
 }
 
 // Destination: git — commit + push the dashboard data (triggers host redeploy)

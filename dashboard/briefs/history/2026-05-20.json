@@ -1,0 +1,179 @@
+{
+  "edition": 5,
+  "date": "2026-05-20",
+  "generatedAt": "2026-05-20T13:30:00Z",
+  "executiveSummary": [
+    "Demand is the constraint, not the product. The funnel is fixed (LP crash + price bug resolved 05-19) but there have been no orders in 10 days.",
+    "Every channel leaks at the same step — the click-through. Social reach, email opens (33–40%) and SEO impressions all convert to near-zero clicks to site.",
+    "EB25 (25% off) expires Friday with zero uses. Decide today: extend, relaunch with a push, or let it lapse.",
+    "Manufacturing tracks to ~Jun 25. The live risks are the Minewing assembly PI (cert hold) and the Shopify→NSS integration gap."
+  ],
+  "northStar": {
+    "label": "Pre-order revenue to the £200k milestone",
+    "current": 2009,
+    "goal": 200000,
+    "unit": "$",
+    "note": "12 paid Shopify pre-orders · Kickstarter excluded (backers refunded)"
+  },
+  "needsDecision": [
+    { "item": "Decide EB25 — extend / relaunch with a push / let it lapse", "lens": "CMO/CFO", "why": "Expires Friday, 0 uses" },
+    { "item": "Reply to Tapan (UCS, Bangladesh distributor)", "lens": "Inbox", "why": "Awaiting your reply" },
+    { "item": "Chase Minewing on the cert clarification", "lens": "CTO", "why": "Assembly PI on hold since 05-18 — ship-date risk" }
+  ],
+  "kpis": [
+    { "label": "Sessions (7d)", "value": "183", "delta": "+19", "status": "neutral", "spark": [164, 170, 150, 183] },
+    { "label": "Conversion rate", "value": "~0%", "delta": "10 days dry", "status": "bad", "spark": [1.05, 0.2, 0.77, 0] },
+    { "label": "Orders (7d)", "value": "0", "delta": "last May 10", "status": "bad", "spark": [1, 1, 0, 0] },
+    { "label": "Pre-order revenue", "value": "$2,009", "delta": "12 orders", "status": "warn", "spark": [822, 1128, 1547, 2009] },
+    { "label": "IG followers", "value": "2,156", "delta": "+30", "status": "good", "spark": [2126, 2138, 2150, 2156] },
+    { "label": "Email click rate", "value": "~0%", "delta": "opens 36%", "status": "bad", "spark": [0, 0, 0, 1, 2] },
+    { "label": "Ship date", "value": "Jun 25", "delta": "amber", "status": "warn" },
+    { "label": "SEO health", "value": "52/100", "delta": "flat", "status": "warn", "spark": [58, 52] }
+  ],
+  "charts": [
+    { "id": "funnel", "title": "Funnel (last 7d)", "type": "bar", "labels": ["LP", "Build-kit", "Cart", "Order"],
+      "datasets": [{ "label": "Sessions", "data": [83, 28, 1, 0], "color": "#5b9bf0" }] },
+    { "id": "ordersByCountry", "title": "Paid orders by country (lifetime)", "type": "bar",
+      "labels": ["Indonesia", "USA", "Spain", "Taiwan", "Vietnam", "Australia"],
+      "datasets": [{ "label": "Orders", "data": [4, 4, 1, 1, 1, 1], "color": "#3fb8b0" }] },
+    { "id": "cumRevenue", "title": "Cumulative pre-order revenue ($)", "type": "line",
+      "labels": ["Mar 23", "Mar 30", "Apr 2", "Apr 5", "Apr 6", "Apr 18", "Apr 27", "Apr 28", "May 1", "May 2", "May 6", "May 10"],
+      "datasets": [{ "label": "Cumulative $", "data": [259, 563, 702, 822, 957, 1128, 1260, 1404, 1547, 1685, 1843, 2009], "color": "#c9a227" }] },
+    { "id": "channels", "title": "Sessions by channel (7d, GA4)", "type": "doughnut",
+      "labels": ["Direct (untracked)", "Organic Shopping", "Organic Search", "Organic Social", "Other"],
+      "datasets": [{ "label": "Sessions", "data": [129, 13, 11, 10, 20] }] },
+    { "id": "gsc", "title": "Search Console — weekly", "type": "line", "labels": ["wk1", "wk2", "wk3", "wk4"],
+      "datasets": [
+        { "label": "Clicks", "data": [16, 12, 16, 15], "color": "#3aa675" },
+        { "label": "Impressions", "data": [194, 210, 194, 258], "color": "#5b9bf0" }
+      ] },
+    { "id": "igFollowers", "title": "Followers", "type": "line", "labels": ["May 3", "May 10", "May 20"],
+      "datasets": [{ "label": "Followers", "data": [2126, 2140, 2156], "color": "#9b8cf0" }] },
+    { "id": "email", "title": "Opens vs clicks", "type": "bar", "labels": ["05-05", "05-06", "05-07", "05-09", "05-12"],
+      "datasets": [
+        { "label": "Open %", "data": [39, 39, 33, 36, 36], "color": "#c9a227" },
+        { "label": "Clicks", "data": [0, 0, 0, 1, 2], "color": "#e0524b" }
+      ] }
+  ],
+  "store": {
+    "title": "Shopify Store",
+    "sub": "12 paid · $2,009 · AOV $167",
+    "metrics": [
+      { "name": "Lifetime paid orders", "value": "12", "delta": "+0 in 10d" },
+      { "name": "Lifetime revenue", "value": "$2,009", "delta": "AOV $167" },
+      { "name": "EB units sold", "value": "14", "delta": "" },
+      { "name": "Active discount", "value": "EB25 (25%)", "delta": "0 uses, ends Fri" },
+      { "name": "Conversion rate", "value": "~0%", "delta": "10 days dry" }
+    ],
+    "chartIds": ["funnel", "ordersByCountry", "cumRevenue"],
+    "notes": [
+      "Funnel is fixed but unfed — the leak is BYK→cart and top-of-funnel demand, not the LP.",
+      "Orders skew Indonesia (Bali) + USA; all are pre-orders awaiting the June ship."
+    ]
+  },
+  "onlinePresence": {
+    "title": "Website & online presence",
+    "sub": "183 sessions/wk · SEO 52/100",
+    "metrics": [
+      { "name": "Sessions (7d)", "value": "183", "delta": "+19" },
+      { "name": "Direct / untracked", "value": "70%", "delta": "UTM gap" },
+      { "name": "GSC clicks (7d)", "value": "15", "delta": "+3" },
+      { "name": "GSC avg position", "value": "6.0", "delta": "from 8.8" },
+      { "name": "SEO health", "value": "52/100", "delta": "flat" }
+    ],
+    "chartIds": ["channels", "gsc"],
+    "clarity": [
+      { "name": "Avg scroll depth", "value": "53.6%", "status": "good" },
+      { "name": "Rage clicks (3d)", "value": "0", "status": "good" },
+      { "name": "Dead clicks (3d)", "value": "7", "status": "warn" },
+      { "name": "JS errors (3d)", "value": "3", "status": "warn" }
+    ],
+    "notes": [
+      "SEO is ~90% brand. Comparison keywords (helmet vs air purifier) rank page-1 with 0 clicks — title/CTR opportunity.",
+      "70% of traffic is untracked Direct — outbound links need UTMs to see the real source mix."
+    ]
+  },
+  "channels": [
+    { "id": "instagram", "name": "Instagram", "sub": "@easi.breezi", "headline": "2,156 followers · +30",
+      "metrics": [
+        { "name": "Followers", "value": "2,156", "delta": "+30 since May 3" },
+        { "name": "Posts", "value": "167", "delta": "+4" },
+        { "name": "Sessions to site (7d)", "value": "10", "delta": "low" }
+      ],
+      "chartIds": ["igFollowers"],
+      "notes": ["3 viral Reels drove 1.6M reach + 263 follows in 6 weeks — the growth engine.", "Reach is not converting to site clicks — fix the bio link path + CTA."] },
+    { "id": "youtube", "name": "YouTube", "sub": "@EasiBreeziOfficial", "headline": "170,854 views · 36 subs",
+      "metrics": [
+        { "name": "Total views", "value": "170,854", "delta": "+1.9k" },
+        { "name": "Subscribers", "value": "36", "delta": "flat" },
+        { "name": "Videos", "value": "92", "delta": "idle since Jan" }
+      ],
+      "notes": ["Standout: How a regular helmet handles smog — 106k views.", "Plan: mirror top IG Reels as Shorts (no watermark)."] },
+    { "id": "tiktok", "name": "TikTok", "sub": "@easi_breezi", "headline": "Pixel pending",
+      "metrics": [
+        { "name": "Pixel", "value": "Account contract pending", "delta": "2-min unblock" },
+        { "name": "Strategy", "value": "Mirror IG winners", "delta": "" }
+      ],
+      "notes": ["Repurpose proven IG Reels; route comments to DM like IG."] },
+    { "id": "email", "name": "Email (Brevo)", "sub": "transactional + marketing", "headline": "Opens 33–40% · clicks ≈ 0%",
+      "metrics": [
+        { "name": "Engaged list", "value": "475", "delta": "Master 329 +2" },
+        { "name": "Sends left (May)", "value": "53", "delta": "of 500/mo" },
+        { "name": "Avg open rate", "value": "36%", "delta": "healthy" },
+        { "name": "Avg click rate", "value": "~0%", "delta": "the leak" }
+      ],
+      "chartIds": ["email"],
+      "notes": ["Kickstarter list (12,926) removed — backers refunded; not a live audience.", "Opens are healthy; the email body/CTA is not earning the click. Test a single-CTA rewrite."] }
+  ],
+  "competitors": [
+    { "name": "Zyon Helmets", "price": "~$935", "preorders": "4,000+", "form": "whole new helmet", "cert": "ECE 22.06 + MIPS", "threat": "high",
+      "note": "Press in MCN, T3, Visordown, RideApart. Companion app (AQI + filter alerts). Moat = press parity + app." },
+    { "name": "BluArmor (BluSnap)", "price": "~$70", "preorders": "established (India)", "form": "helmet air circulator", "cert": "cooling, not filtration", "threat": "med",
+      "note": "Adjacent — cools/circulates but does not filter PM2.5. Different job; watch positioning." },
+    { "name": "Easi Breezi", "price": "$127.50", "preorders": "12 paid (Shopify)", "form": "modular clip-on", "cert": "HEPA H11, IP pending", "threat": "—",
+      "note": "8.5× cheaper than Zyon, fits any helmet, true HEPA. Edge = modular + price + filtration." }
+  ],
+  "landscape": "Zyon's 4,000+ pre-orders prove the category is real, and their edge over us is press parity (6+ outlets vs our 1) plus a companion app. Our wedge: modular, 8.5× cheaper, and real HEPA filtration (BluArmor only cools). SE Asia haze season is a demand tailwind. Priority: pitch MCN / RideApart / Visordown to close the press gap and bring the smart/app roadmap forward in messaging.",
+  "manufacturing": {
+    "shipDate": "2026-06-25",
+    "daysToShip": 36,
+    "status": "amber",
+    "cog": "$15.91/unit",
+    "margin": "90.6% @ $170",
+    "timeline": [
+      { "item": "Tube (Yimi Care)", "eta": "delivered", "status": "green" },
+      { "item": "Injection-moulded parts", "eta": "May 25", "status": "green" },
+      { "item": "Fan / button / seals", "eta": "arrived — QC", "status": "amber" },
+      { "item": "Magnet (Ailixin)", "eta": "~May 22", "status": "red" },
+      { "item": "Wires harness (Hongxin)", "eta": "May 31 — binding", "status": "amber" },
+      { "item": "Final assembly (Minewing)", "eta": "PI on hold", "status": "red" }
+    ],
+    "notes": [
+      "Minewing assembly PI on hold pending cert clarification (since 05-18) — top ship-date risk.",
+      "Shopify→NextSmartShip integration not hooked up — P0 before the June ship.",
+      "At-risk capital $560 (Ailixin magnet, supplier identity unverified)."
+    ]
+  },
+  "inbox": {
+    "items": [
+      { "summary": "Tapan (UCS distributor) re-reply — needs your response", "urgency": "high" },
+      { "summary": "A sent email bounced (mailer-daemon) — check which", "urgency": "medium" },
+      { "summary": "Kevin: IP67-strip on labels in progress + video update awaiting review", "urgency": "medium" },
+      { "summary": "Meta blue-badge phishing email — ignore", "urgency": "ignore" }
+    ]
+  },
+  "contentAngle": [
+    "There is a $935 air-purifying helmet now (Zyon). Or keep your helmet and clip this on for $127.50.",
+    "Two-wheeler riders breathe 7.7× more particulates than car drivers (2,860 vs 370 µg/m³)."
+  ],
+  "actionStack": [
+    "Decide EB25 before Friday",
+    "Push demand onto the fixed funnel — small Brevo retest to the engaged 475 (within 53 sends)",
+    "Reply to Tapan + check the email bounce",
+    "Chase Minewing on the cert clarification to unblock assembly",
+    "Nudge David Lai on the Shopify→NSS integration",
+    "Pitch MCN / RideApart / Visordown to close the press gap with Zyon"
+  ],
+  "toolIssues": [],
+  "sources": { "shopify": "ok", "ga4": "ok", "gsc": "ok", "clarity": "ok", "brevo": "ok", "instagram": "ok", "youtube": "ok", "zoho": "ok", "slack": "ok" }
+}

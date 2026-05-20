@@ -36,6 +36,9 @@ test('renders a competitor with threat badge', () => { const h = html(); assert.
 test('renders the manufacturing countdown + timeline item', () => { const h = html(); assert.ok(h.includes('Manufacturing') && h.includes('36') && h.includes('Wires')); });
 test('renders an inbox item', () => assert.ok(html().includes('Tapan reply')));
 test('renders the action stack', () => assert.ok(html().includes('Action stack')));
+test('renders the EB logo + brand wordmark', () => { const h = html(); assert.ok(h.includes('<svg') && h.includes('Easi Breezi')); });
+test('renders the day picker + review toggle', () => { const h = html(); assert.ok(h.includes('daypick') && h.includes('reviewtoggle')); });
+test('sections are commentable with comment boxes', () => { const h = html(); assert.ok(h.includes('commentable') && h.includes('data-item') && h.includes('cbox')); });
 test('does not throw on a minimal core-only brief', () => {
   const core = { edition: 1, date: '2026-01-01', generatedAt: 'x', headline: ['h'], sources: { ga4: 'ok' } };
   assert.doesNotThrow(() => buildBriefHTML(core));
