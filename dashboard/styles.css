@@ -169,3 +169,20 @@ body.review .cbox{display:block}
   .submitbar{left:14px;right:14px;transform:none;justify-content:space-between}
 }
 @media (max-width:380px){ .kpis{grid-template-columns:1fr} .signals{grid-template-columns:1fr} }
+
+/* ---- v5: performance cues, trend arrows, news, motion ---- */
+.kpi .arrow{font-size:11px;margin-left:5px}
+.arrow.up{color:var(--good)} .arrow.down{color:var(--bad)} .arrow.flat{color:var(--faint)}
+.kpi .verdict{font-size:11px;margin-top:7px;font-weight:600}
+.verdict.good{color:var(--good)} .verdict.bad{color:var(--bad)} .verdict.warn{color:var(--amber)} .verdict.neutral{color:var(--eb-blue)}
+.cardlet.news .opp{margin-top:9px;font-size:12.5px;color:var(--eb-blue);font-weight:600;line-height:1.45}
+.cardlet.news.bad{border-left:3px solid var(--bad)}
+.cardlet.news.watch{border-left:3px solid var(--amber)}
+.cardlet.news.good{border-left:3px solid var(--good)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.exec,.northstar,details.section,.kpis{animation:fadeUp .45s ease both}
+.kpi,.chart-card,.cardlet,.sig{transition:transform .15s ease,border-color .15s ease}
+.kpi:hover,.chart-card:hover,.cardlet:hover,.sig:hover{transform:translateY(-2px)}
+.kpi.bad::before{animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

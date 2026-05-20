@@ -7,7 +7,8 @@ const sample = {
   executiveSummary: ['Demand is the constraint, not the product'],
   northStar: { label: 'Pre-orders to goal', current: 2009, goal: 200000, unit: '$', note: '12 paid' },
   needsDecision: [{ item: 'Decide EB25', lens: 'CMO', why: 'expires Friday' }],
-  kpis: [{ label: 'Sessions (7d)', value: '183', delta: '+19', status: 'neutral', spark: [164, 183] }],
+  kpis: [{ label: 'Sessions (7d)', value: '183', delta: '+19', status: 'good', trend: 'up', verdict: 'ticking up', spark: [164, 183] }],
+  news: [{ headline: 'India PM2.5 alert', tag: 'India', tone: 'bad', detail: 'haze season', opportunity: 'target India riders', source: 'IQAir' }],
   charts: [
     { id: 'funnel', title: 'Funnel', type: 'bar', labels: ['LP'], datasets: [{ label: 'S', data: [83] }] },
     { id: 'igFollowers', title: 'Followers', type: 'line', labels: ['x'], datasets: [{ label: 'F', data: [2156] }] }
@@ -39,6 +40,8 @@ test('renders the action stack', () => assert.ok(html().includes('Action stack')
 test('renders the EB logo image', () => { const h = html(); assert.ok(h.includes('eb-logo-white.png') && h.includes('Easi Breezi')); });
 test('renders the day picker + review toggle', () => { const h = html(); assert.ok(h.includes('daypick') && h.includes('reviewtoggle')); });
 test('sections are commentable with comment boxes', () => { const h = html(); assert.ok(h.includes('commentable') && h.includes('data-item') && h.includes('cbox')); });
+test('renders KPI verdict cue + trend arrow', () => { const h = html(); assert.ok(h.includes('ticking up') && h.includes('arrow up')); });
+test('renders News & opportunities with the opportunity line', () => { const h = html(); assert.ok(h.includes('India PM2.5 alert') && h.includes('target India riders')); });
 test('does not throw on a minimal core-only brief', () => {
   const core = { edition: 1, date: '2026-01-01', generatedAt: 'x', headline: ['h'], sources: { ga4: 'ok' } };
   assert.doesNotThrow(() => buildBriefHTML(core));

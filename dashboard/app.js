@@ -2,6 +2,10 @@ export function esc(s) {
   return String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
+// RAG performance palette (green on-track / amber caution / red off-target)
+const RAG = { good: '#35c08a', watch: '#e6b23e', bad: '#f0625a', neutral: '#20bcf3' };
+function arrow(t) { return t === 'up' ? '▲' : t === 'down' ? '▼' : '▬'; }
+
 const EB_LOGO_SRC = './eb-logo-white.png';
 
 function cbox(item) {
@@ -64,7 +68,10 @@ function northStar(ns) {
 function kpiStrip(kpis) {
   if (!Array.isArray(kpis) || !kpis.length) return '';
   return `<section class="kpis">${kpis.map(k => `<div class="kpi ${esc(k.status || 'neutral')}">
-    <div class="label">${esc(k.label)}</div><div class="value num">${esc(k.value)}</div><div class="delta">${esc(k.delta || '')}</div>
+    <div class="label">${esc(k.label)}</div>
+    <div class="value num">${esc(k.value)}${k.trend ? ` <span class="arrow ${esc(k.trend)}">${arrow(k.trend)}</span>` : ''}</div>
+    <div class="delta">${esc(k.delta || '')}</div>
+    ${k.verdict ? `<div class="verdict ${esc(k.status || 'neutral')}">${esc(k.verdict)}</div>` : ''}
     ${Array.isArray(k.spark) && k.spark.length ? `<canvas class="spark" data-spark="${esc(JSON.stringify(k.spark))}"></canvas>` : ''}
   </div>`).join('')}</section>`;
 }
@@ -88,6 +95,16 @@ function channelSection(ch, charts) {
   const body = (ch.headline ? `<div class="ch-headline num">${esc(ch.headline)}</div>` : '') + metricsTable(ch.metrics) + chartRow(ch.chartIds, charts) + notesList(ch.notes);
   return section(ch.name || ch.id, ch.sub || '', body);
 }
+function newsSection(news) {
+  if (!Array.isArray(news) || !news.length) return '';
+  const cards = news.map(n => `<div class="cardlet news ${esc(n.tone || '')}">
+    <div class="t">${esc(n.headline)} ${n.tag ? `<span class="badge ${n.tone === 'bad' ? 'high' : n.tone === 'watch' ? 'med' : 'low'}">${esc(n.tag)}</span>` : ''}</div>
+    ${n.detail ? `<div class="n">${esc(n.detail)}</div>` : ''}
+    ${n.opportunity ? `<div class="opp">⚡ ${esc(n.opportunity)}</div>` : ''}
+    ${n.source ? `<div class="d">${esc(n.source)}</div>` : ''}</div>`).join('');
+  return section('News & opportunities', `${news.length} live`, `<div class="cards">${cards}</div>`);
+}
+
 function competitorsSection(list, landscape) {
   if ((!Array.isArray(list) || !list.length) && !landscape) return '';
   const cards = (list || []).map(c => `<div class="cardlet">
@@ -131,6 +148,7 @@ export function buildBriefHTML(b) {
     ${storeSection(b.store, b.charts)}
     ${onlineSection(b.onlinePresence, b.charts)}
     ${channels}
+    ${newsSection(b.news)}
     ${competitorsSection(b.competitors, b.landscape)}
     ${manufacturingSection(b.manufacturing)}
     ${inboxSection(b.inbox || (b.lenses && b.lenses.inbox))}
@@ -155,12 +173,17 @@ function renderCharts(brief) {
   });
   (brief.charts || []).forEach(c => {
     const el = document.getElementById('chart-' + c.id); if (!el) return;
-    const ds = (c.datasets || []).map((d, i) => ({
-      label: d.label, data: d.data,
-      backgroundColor: c.type === 'doughnut' ? palette : (d.color || palette[i % palette.length]),
-      borderColor: c.type === 'doughnut' ? '#0e1320' : (d.color || palette[i % palette.length]),
-      borderWidth: c.type === 'doughnut' ? 2 : 2, pointRadius: 0, tension: .35, borderRadius: c.type === 'bar' ? 5 : 0
-    }));
+    const ds = (c.datasets || []).map((d, i) => {
+      // RAG-colour per bar/point when a dataset declares performance tones
+      const bg = Array.isArray(d.tones)
+        ? d.tones.map(t => RAG[t] || RAG.neutral)
+        : (c.type === 'doughnut' ? palette : (d.color || palette[i % palette.length]));
+      return {
+        label: d.label, data: d.data, backgroundColor: bg,
+        borderColor: c.type === 'doughnut' ? '#0e1320' : (Array.isArray(d.tones) ? bg : (d.color || palette[i % palette.length])),
+        borderWidth: 2, pointRadius: 0, tension: .35, borderRadius: c.type === 'bar' ? 5 : 0
+      };
+    });
     new C(el, { type: c.type || 'line', data: { labels: c.labels, datasets: ds },
       options: {
         plugins: { legend: { display: c.type === 'doughnut' || (c.datasets || []).length > 1, position: c.type === 'doughnut' ? 'right' : 'top', labels: { boxWidth: 9, boxHeight: 9, padding: 12, font: { size: 11 } } } },

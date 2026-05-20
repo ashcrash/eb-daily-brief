@@ -1,7 +1,7 @@
 {
   "edition": 5,
   "date": "2026-05-20",
-  "generatedAt": "2026-05-20T13:30:00Z",
+  "generatedAt": "2026-05-20T14:30:00Z",
   "executiveSummary": [
     "Demand is the constraint, not the product. The funnel is fixed (LP crash + price bug resolved 05-19) but there have been no orders in 10 days.",
     "Every channel leaks at the same step — the click-through. Social reach, email opens (33–40%) and SEO impressions all convert to near-zero clicks to site.",
@@ -10,9 +10,7 @@
   ],
   "northStar": {
     "label": "Pre-order revenue to the £200k milestone",
-    "current": 2009,
-    "goal": 200000,
-    "unit": "$",
+    "current": 2009, "goal": 200000, "unit": "$",
     "note": "12 paid Shopify pre-orders · Kickstarter excluded (backers refunded)"
   },
   "needsDecision": [
@@ -21,43 +19,42 @@
     { "item": "Chase Minewing on the cert clarification", "lens": "CTO", "why": "Assembly PI on hold since 05-18 — ship-date risk" }
   ],
   "kpis": [
-    { "label": "Sessions (7d)", "value": "183", "delta": "+19", "status": "neutral", "spark": [164, 170, 150, 183] },
-    { "label": "Conversion rate", "value": "~0%", "delta": "10 days dry", "status": "bad", "spark": [1.05, 0.2, 0.77, 0] },
-    { "label": "Orders (7d)", "value": "0", "delta": "last May 10", "status": "bad", "spark": [1, 1, 0, 0] },
-    { "label": "Pre-order revenue", "value": "$2,009", "delta": "12 orders", "status": "warn", "spark": [822, 1128, 1547, 2009] },
-    { "label": "IG followers", "value": "2,156", "delta": "+30", "status": "good", "spark": [2126, 2138, 2150, 2156] },
-    { "label": "Email click rate", "value": "~0%", "delta": "opens 36%", "status": "bad", "spark": [0, 0, 0, 1, 2] },
-    { "label": "Ship date", "value": "Jun 25", "delta": "amber", "status": "warn" },
-    { "label": "SEO health", "value": "52/100", "delta": "flat", "status": "warn", "spark": [58, 52] }
+    { "label": "Sessions (7d)", "value": "183", "delta": "+19", "status": "good", "trend": "up", "verdict": "ticking up", "spark": [164, 170, 150, 183] },
+    { "label": "Conversion rate", "value": "~0%", "delta": "10 days dry", "status": "bad", "trend": "down", "verdict": "critical", "spark": [1.05, 0.2, 0.77, 0] },
+    { "label": "Orders (7d)", "value": "0", "delta": "last May 10", "status": "bad", "trend": "down", "verdict": "needs urgent push", "spark": [1, 1, 0, 0] },
+    { "label": "Pre-order revenue", "value": "$2,009", "delta": "12 orders", "status": "warn", "trend": "flat", "verdict": "stalled", "spark": [822, 1128, 1547, 2009] },
+    { "label": "IG followers", "value": "2,156", "delta": "+30", "status": "good", "trend": "up", "verdict": "growing", "spark": [2126, 2138, 2150, 2156] },
+    { "label": "Email click rate", "value": "~0%", "delta": "opens 36%", "status": "bad", "trend": "flat", "verdict": "opens fine, clicks dead", "spark": [0, 0, 0, 1, 2] },
+    { "label": "Ship date", "value": "Jun 25", "delta": "amber", "status": "warn", "trend": "flat", "verdict": "on track, gated", "spark": [] },
+    { "label": "SEO health", "value": "52/100", "delta": "flat", "status": "warn", "trend": "flat", "verdict": "needs work", "spark": [58, 52] }
   ],
   "charts": [
-    { "id": "funnel", "title": "Funnel (last 7d)", "type": "bar", "labels": ["LP", "Build-kit", "Cart", "Order"],
-      "datasets": [{ "label": "Sessions", "data": [83, 28, 1, 0], "color": "#5b9bf0" }] },
+    { "id": "funnel", "title": "Funnel (last 7d) — green good · amber caution · red leak", "type": "bar", "labels": ["LP", "Build-kit", "Cart", "Order"],
+      "datasets": [{ "label": "Sessions", "data": [83, 28, 1, 0], "tones": ["good", "watch", "bad", "bad"] }] },
     { "id": "ordersByCountry", "title": "Paid orders by country (lifetime)", "type": "bar",
       "labels": ["Indonesia", "USA", "Spain", "Taiwan", "Vietnam", "Australia"],
-      "datasets": [{ "label": "Orders", "data": [4, 4, 1, 1, 1, 1], "color": "#3fb8b0" }] },
+      "datasets": [{ "label": "Orders", "data": [4, 4, 1, 1, 1, 1], "color": "#20BCF3" }] },
     { "id": "cumRevenue", "title": "Cumulative pre-order revenue ($)", "type": "line",
       "labels": ["Mar 23", "Mar 30", "Apr 2", "Apr 5", "Apr 6", "Apr 18", "Apr 27", "Apr 28", "May 1", "May 2", "May 6", "May 10"],
       "datasets": [{ "label": "Cumulative $", "data": [259, 563, 702, 822, 957, 1128, 1260, 1404, 1547, 1685, 1843, 2009], "color": "#c9a227" }] },
     { "id": "channels", "title": "Sessions by channel (7d, GA4)", "type": "doughnut",
       "labels": ["Direct (untracked)", "Organic Shopping", "Organic Search", "Organic Social", "Other"],
       "datasets": [{ "label": "Sessions", "data": [129, 13, 11, 10, 20] }] },
-    { "id": "gsc", "title": "Search Console — weekly", "type": "line", "labels": ["wk1", "wk2", "wk3", "wk4"],
+    { "id": "gsc", "title": "Search Console — impressions strong, clicks lagging", "type": "line", "labels": ["wk1", "wk2", "wk3", "wk4"],
       "datasets": [
-        { "label": "Clicks", "data": [16, 12, 16, 15], "color": "#3aa675" },
-        { "label": "Impressions", "data": [194, 210, 194, 258], "color": "#5b9bf0" }
+        { "label": "Clicks", "data": [16, 12, 16, 15], "color": "#f0625a" },
+        { "label": "Impressions", "data": [194, 210, 194, 258], "color": "#35c08a" }
       ] },
     { "id": "igFollowers", "title": "Followers", "type": "line", "labels": ["May 3", "May 10", "May 20"],
-      "datasets": [{ "label": "Followers", "data": [2126, 2140, 2156], "color": "#9b8cf0" }] },
-    { "id": "email", "title": "Opens vs clicks", "type": "bar", "labels": ["05-05", "05-06", "05-07", "05-09", "05-12"],
+      "datasets": [{ "label": "Followers", "data": [2126, 2140, 2156], "color": "#35c08a" }] },
+    { "id": "email", "title": "Email — opens healthy, clicks dead", "type": "bar", "labels": ["05-05", "05-06", "05-07", "05-09", "05-12"],
       "datasets": [
-        { "label": "Open %", "data": [39, 39, 33, 36, 36], "color": "#c9a227" },
-        { "label": "Clicks", "data": [0, 0, 0, 1, 2], "color": "#e0524b" }
+        { "label": "Open %", "data": [39, 39, 33, 36, 36], "color": "#35c08a" },
+        { "label": "Clicks", "data": [0, 0, 0, 1, 2], "color": "#f0625a" }
       ] }
   ],
   "store": {
-    "title": "Shopify Store",
-    "sub": "12 paid · $2,009 · AOV $167",
+    "title": "Shopify Store", "sub": "12 paid · $2,009 · AOV $167",
     "metrics": [
       { "name": "Lifetime paid orders", "value": "12", "delta": "+0 in 10d" },
       { "name": "Lifetime revenue", "value": "$2,009", "delta": "AOV $167" },
@@ -72,8 +69,7 @@
     ]
   },
   "onlinePresence": {
-    "title": "Website & online presence",
-    "sub": "183 sessions/wk · SEO 52/100",
+    "title": "Website & online presence", "sub": "183 sessions/wk · SEO 52/100",
     "metrics": [
       { "name": "Sessions (7d)", "value": "183", "delta": "+19" },
       { "name": "Direct / untracked", "value": "70%", "delta": "UTM gap" },
@@ -125,6 +121,21 @@
       "chartIds": ["email"],
       "notes": ["Kickstarter list (12,926) removed — backers refunded; not a live audience.", "Opens are healthy; the email body/CTA is not earning the click. Test a single-CTA rewrite."] }
   ],
+  "news": [
+    { "headline": "India PM2.5 averages 48.9 µg/m³ — ~10× the WHO limit (6th most polluted globally)", "tag": "India", "tone": "bad",
+      "detail": "South Asia is still the most polluted region; haze season is driven by upwind crop-residue burning.",
+      "opportunity": "Time an India-targeted IG Reel + a Brevo send to AQI spikes; push the comparison-keyword SEO that already ranks page-1.",
+      "source": "IQAir 2025 World Air Quality Report" },
+    { "headline": "Wildfire smoke kills ~1.5M people/year — 90%+ in developing countries", "tag": "Africa/global", "tone": "bad",
+      "detail": "Sub-Saharan Africa is ~40% of fire-PM2.5 deaths (Nigeria, DRC); India + Indonesia also high.",
+      "opportunity": "This is EB's exact use case (PM2.5 while riding). Use the stat in press pitches (MCN/RideApart) + LinkedIn B2B carousels.",
+      "source": "Nature npj Clean Air · Earth.org" },
+    { "headline": "Indonesia PM2.5 ~30 µg/m³ — highest in SE Asia (improved 16%)", "tag": "Bali", "tone": "watch",
+      "detail": "You're based in Bali and already have orders there — a live, local proof market on your doorstep.",
+      "opportunity": "Ride-along content in Bali traffic; localise the LP + ads for Indonesia while the season peaks.",
+      "source": "IQAir 2025" }
+  ],
+  "landscape": "Zyon's 4,000+ pre-orders prove the category is real, and their edge over us is press parity (6+ outlets vs our 1) plus a companion app. Our wedge: modular, 8.5× cheaper, and real HEPA filtration (BluArmor only cools). SE Asia haze season is a demand tailwind. Priority: pitch MCN / RideApart / Visordown to close the press gap and bring the smart/app roadmap forward in messaging.",
   "competitors": [
     { "name": "Zyon Helmets", "price": "~$935", "preorders": "4,000+", "form": "whole new helmet", "cert": "ECE 22.06 + MIPS", "threat": "high",
       "note": "Press in MCN, T3, Visordown, RideApart. Companion app (AQI + filter alerts). Moat = press parity + app." },
@@ -133,13 +144,8 @@
     { "name": "Easi Breezi", "price": "$127.50", "preorders": "12 paid (Shopify)", "form": "modular clip-on", "cert": "HEPA H11, IP pending", "threat": "—",
       "note": "8.5× cheaper than Zyon, fits any helmet, true HEPA. Edge = modular + price + filtration." }
   ],
-  "landscape": "Zyon's 4,000+ pre-orders prove the category is real, and their edge over us is press parity (6+ outlets vs our 1) plus a companion app. Our wedge: modular, 8.5× cheaper, and real HEPA filtration (BluArmor only cools). SE Asia haze season is a demand tailwind. Priority: pitch MCN / RideApart / Visordown to close the press gap and bring the smart/app roadmap forward in messaging.",
   "manufacturing": {
-    "shipDate": "2026-06-25",
-    "daysToShip": 36,
-    "status": "amber",
-    "cog": "$15.91/unit",
-    "margin": "90.6% @ $170",
+    "shipDate": "2026-06-25", "daysToShip": 36, "status": "amber", "cog": "$15.91/unit", "margin": "90.6% @ $170",
     "timeline": [
       { "item": "Tube (Yimi Care)", "eta": "delivered", "status": "green" },
       { "item": "Injection-moulded parts", "eta": "May 25", "status": "green" },

@@ -21,7 +21,7 @@ export function validateBrief(b) {
   req(b.sources && typeof b.sources === 'object' && !Array.isArray(b.sources), 'sources must be an object');
 
   // --- optional presentation sections ---
-  optArr('headline'); optArr('executiveSummary'); optArr('kpis'); optArr('charts'); optArr('channels');
+  optArr('headline'); optArr('executiveSummary'); optArr('kpis'); optArr('charts'); optArr('channels'); optArr('news');
   optArr('competitors'); optArr('needsDecision'); optArr('actionStack'); optArr('contentAngle'); optArr('toolIssues');
   optObj('northStar'); optObj('store'); optObj('onlinePresence'); optObj('manufacturing'); optObj('lenses'); optObj('inbox');
   optStr('landscape');
