@@ -1,0 +1,59 @@
+{
+  "edition": 2,
+  "date": "2026-05-20",
+  "generatedAt": "2026-05-20T00:05:00Z",
+  "headline": [
+    "05-19 LP hotfix worked — Clarity scroll recovered, errors low",
+    "Still 0 orders in 10 days (last #1017, 2026-05-10)",
+    "EB25 (25% off) 0 uses, expires Friday 2026-05-22"
+  ],
+  "needsDecision": [
+    { "item": "Decide EB25 — extend / relaunch / lapse", "lens": "CMO/CFO", "why": "Expires Friday, 0 uses" },
+    { "item": "Reply to Tapan (UCS distributor)", "lens": "Inbox", "why": "Awaiting your reply" }
+  ],
+  "lenses": {
+    "cmo": {
+      "narrative": "Funnel fixed; demand flat. Email opens 33-40% but clicks ~0. Social reach not converting (Organic Social 10 sessions).",
+      "metrics": [
+        { "name": "IG followers", "value": "2,156", "prior": "2,126", "delta": "+30", "flag": "" },
+        { "name": "YouTube views", "value": "170,854", "prior": "169,000", "delta": "+1.9k", "flag": "" },
+        { "name": "GSC clicks (7d)", "value": "15", "prior": "12", "delta": "+3", "flag": "" },
+        { "name": "Brevo sends left", "value": "53", "prior": "54", "delta": "-1", "flag": "low" }
+      ]
+    },
+    "cfo": {
+      "narrative": "Lifetime Shopify: 12 paid pre-orders, ~$2,009. 0 new in 10 days. COG $15.91, 90.6% @ $170.",
+      "metrics": [
+        { "name": "Orders (7d)", "value": "0", "prior": "0", "delta": "0", "flag": "dry" },
+        { "name": "Investor pipeline", "value": "2 warm / 0 committed", "prior": "2 / 0", "delta": "0", "flag": "Nick ~29d stale" }
+      ]
+    },
+    "cto": {
+      "narrative": "Ship amber ~2026-06-25. Wires land 05-31. Minewing PI on hold; NSS integration gap.",
+      "metrics": [
+        { "name": "Ship date", "value": "amber ~06-25", "prior": "amber", "delta": "0", "flag": "" },
+        { "name": "SEO health", "value": "52/100", "prior": "52", "delta": "0", "flag": "" }
+      ]
+    },
+    "inbox": {
+      "items": [
+        { "summary": "Tapan (UCS distributor) re-reply", "urgency": "high" },
+        { "summary": "Mail delivery bounce unresolved", "urgency": "medium" },
+        { "summary": "Meta-badge phishing email", "urgency": "ignore" }
+      ]
+    }
+  },
+  "contentAngle": [
+    "$935 Zyon helmet vs $127.50 clip-on (modular > replacement)",
+    "Riders breathe 7.7x more particulates than car drivers"
+  ],
+  "actionStack": [
+    "Decide EB25 (expires Fri)",
+    "Push demand onto the fixed funnel (small Brevo retest)",
+    "Reply Tapan + check bounce",
+    "Chase Minewing cert reply",
+    "Nudge NSS integration"
+  ],
+  "toolIssues": [],
+  "sources": { "shopify": "ok", "ga4": "ok", "gsc": "ok", "brevo": "ok", "clarity": "ok", "instagram": "ok", "youtube": "ok", "zoho": "ok" }
+}
