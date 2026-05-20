@@ -19,31 +19,31 @@
     { "item": "Chase Minewing on the cert clarification", "lens": "CTO", "why": "Assembly PI on hold since 05-18 — ship-date risk" }
   ],
   "kpis": [
-    { "label": "Sessions (7d)", "value": "183", "delta": "+19", "status": "good", "trend": "up", "verdict": "ticking up", "spark": [164, 170, 150, 183] },
+    { "label": "Site visits (7d)", "value": "183", "delta": "+19", "status": "good", "trend": "up", "verdict": "ticking up", "spark": [164, 170, 150, 183] },
     { "label": "Conversion rate", "value": "~0%", "delta": "10 days dry", "status": "bad", "trend": "down", "verdict": "critical", "spark": [1.05, 0.2, 0.77, 0] },
     { "label": "Orders (7d)", "value": "0", "delta": "last May 10", "status": "bad", "trend": "down", "verdict": "needs urgent push", "spark": [1, 1, 0, 0] },
     { "label": "Pre-order revenue", "value": "$2,009", "delta": "12 orders", "status": "warn", "trend": "flat", "verdict": "stalled", "spark": [822, 1128, 1547, 2009] },
-    { "label": "IG followers", "value": "2,156", "delta": "+30", "status": "good", "trend": "up", "verdict": "growing", "spark": [2126, 2138, 2150, 2156] },
+    { "label": "Instagram followers", "value": "2,156", "delta": "+30", "status": "good", "trend": "up", "verdict": "growing", "spark": [2126, 2138, 2150, 2156] },
     { "label": "Email click rate", "value": "~0%", "delta": "opens 36%", "status": "bad", "trend": "flat", "verdict": "opens fine, clicks dead", "spark": [0, 0, 0, 1, 2] },
     { "label": "Ship date", "value": "Jun 25", "delta": "amber", "status": "warn", "trend": "flat", "verdict": "on track, gated", "spark": [] },
     { "label": "SEO health", "value": "52/100", "delta": "flat", "status": "warn", "trend": "flat", "verdict": "needs work", "spark": [58, 52] }
   ],
   "charts": [
     { "id": "funnel", "title": "Funnel (last 7d) — green good · amber caution · red leak", "type": "bar", "labels": ["LP", "Build-kit", "Cart", "Order"],
-      "datasets": [{ "label": "Sessions", "data": [83, 28, 1, 0], "tones": ["good", "watch", "bad", "bad"] }] },
+      "datasets": [{ "label": "Visits", "data": [83, 28, 1, 0], "tones": ["good", "watch", "bad", "bad"] }] },
     { "id": "ordersByCountry", "title": "Paid orders by country (lifetime)", "type": "bar",
       "labels": ["Indonesia", "USA", "Spain", "Taiwan", "Vietnam", "Australia"],
       "datasets": [{ "label": "Orders", "data": [4, 4, 1, 1, 1, 1], "color": "#20BCF3" }] },
     { "id": "cumRevenue", "title": "Cumulative pre-order revenue ($)", "type": "line",
       "labels": ["Mar 23", "Mar 30", "Apr 2", "Apr 5", "Apr 6", "Apr 18", "Apr 27", "Apr 28", "May 1", "May 2", "May 6", "May 10"],
       "datasets": [{ "label": "Cumulative $", "data": [259, 563, 702, 822, 957, 1128, 1260, 1404, 1547, 1685, 1843, 2009], "color": "#c9a227" }] },
-    { "id": "channels", "title": "Sessions by channel (7d, GA4)", "type": "doughnut",
-      "labels": ["Direct (untracked)", "Organic Shopping", "Organic Search", "Organic Social", "Other"],
-      "datasets": [{ "label": "Sessions", "data": [129, 13, 11, 10, 20] }] },
-    { "id": "gsc", "title": "Search Console — impressions strong, clicks lagging", "type": "line", "labels": ["wk1", "wk2", "wk3", "wk4"],
+    { "id": "channels", "title": "Visits by traffic source (7d)", "type": "doughnut",
+      "labels": ["Direct (no source)", "Organic Shopping", "Organic Search", "Organic Social", "Other"],
+      "datasets": [{ "label": "Visits", "data": [129, 13, 11, 10, 20] }] },
+    { "id": "gsc", "title": "Google Search — shown often, clicked rarely", "type": "line", "labels": ["wk1", "wk2", "wk3", "wk4"],
       "datasets": [
         { "label": "Clicks", "data": [16, 12, 16, 15], "color": "#f0625a" },
-        { "label": "Impressions", "data": [194, 210, 194, 258], "color": "#35c08a" }
+        { "label": "Times shown", "data": [194, 210, 194, 258], "color": "#35c08a" }
       ] },
     { "id": "igFollowers", "title": "Followers", "type": "line", "labels": ["May 3", "May 10", "May 20"],
       "datasets": [{ "label": "Followers", "data": [2126, 2140, 2156], "color": "#35c08a" }] },
@@ -54,27 +54,27 @@
       ] }
   ],
   "store": {
-    "title": "Shopify Store", "sub": "12 paid · $2,009 · AOV $167",
+    "title": "Shopify Store", "sub": "12 paid · $2,009 · avg order $167",
     "metrics": [
       { "name": "Lifetime paid orders", "value": "12", "delta": "+0 in 10d" },
-      { "name": "Lifetime revenue", "value": "$2,009", "delta": "AOV $167" },
+      { "name": "Lifetime revenue", "value": "$2,009", "delta": "avg order $167" },
       { "name": "EB units sold", "value": "14", "delta": "" },
       { "name": "Active discount", "value": "EB25 (25%)", "delta": "0 uses, ends Fri" },
       { "name": "Conversion rate", "value": "~0%", "delta": "10 days dry" }
     ],
     "chartIds": ["funnel", "ordersByCountry", "cumRevenue"],
     "notes": [
-      "Funnel is fixed but unfed — the leak is BYK→cart and top-of-funnel demand, not the LP.",
+      "Funnel is fixed but unfed — the leak is build-kit→cart and top-of-funnel demand, not the LP.",
       "Orders skew Indonesia (Bali) + USA; all are pre-orders awaiting the June ship."
     ]
   },
   "onlinePresence": {
-    "title": "Website & online presence", "sub": "183 sessions/wk · SEO 52/100",
+    "title": "Website & online presence", "sub": "183 visits/wk · SEO 52/100",
     "metrics": [
-      { "name": "Sessions (7d)", "value": "183", "delta": "+19" },
-      { "name": "Direct / untracked", "value": "70%", "delta": "UTM gap" },
-      { "name": "GSC clicks (7d)", "value": "15", "delta": "+3" },
-      { "name": "GSC avg position", "value": "6.0", "delta": "from 8.8" },
+      { "name": "Site visits (7d)", "value": "183", "delta": "+19" },
+      { "name": "Direct (no source tag)", "value": "70%", "delta": "no link tags" },
+      { "name": "Google Search clicks (7d)", "value": "15", "delta": "+3" },
+      { "name": "Avg Google rank", "value": "6.0", "delta": "from 8.8" },
       { "name": "SEO health", "value": "52/100", "delta": "flat" }
     ],
     "chartIds": ["channels", "gsc"],
@@ -86,7 +86,7 @@
     ],
     "notes": [
       "SEO is ~90% brand. Comparison keywords (helmet vs air purifier) rank page-1 with 0 clicks — title/CTR opportunity.",
-      "70% of traffic is untracked Direct — outbound links need UTMs to see the real source mix."
+      "70% of traffic is untracked Direct — outbound links need tags to see the real source mix."
     ]
   },
   "channels": [
@@ -94,7 +94,7 @@
       "metrics": [
         { "name": "Followers", "value": "2,156", "delta": "+30 since May 3" },
         { "name": "Posts", "value": "167", "delta": "+4" },
-        { "name": "Sessions to site (7d)", "value": "10", "delta": "low" }
+        { "name": "Visits to site (7d)", "value": "10", "delta": "low" }
       ],
       "chartIds": ["igFollowers"],
       "notes": ["3 viral Reels drove 1.6M reach + 263 follows in 6 weeks — the growth engine.", "Reach is not converting to site clicks — fix the bio link path + CTA."] },
