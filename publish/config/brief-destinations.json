@@ -1,0 +1,6 @@
+{
+  "destinations": [
+    { "type": "dashboard", "enabled": true, "options": {} },
+    { "type": "git", "enabled": true, "options": {} }
+  ]
+}
