@@ -2,122 +2,172 @@ export function esc(s) {
   return String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
+function section(title, sub, body, opts = {}) {
+  if (!body) return '';
+  const cls = opts.cls ? ` ${opts.cls}` : '';
+  const open = opts.open === false ? '' : ' open';
+  return `<details class="section${cls}"${open}>
+    <summary class="section-head"><span class="chev">&rsaquo;</span><span class="ttl">${title}</span>${sub ? `<span class="sub">${esc(sub)}</span>` : ''}</summary>
+    <div class="section-body">${body}</div></details>`;
+}
+
+function metricsTable(metrics) {
+  if (!Array.isArray(metrics) || !metrics.length) return '';
+  const rows = metrics.map(m =>
+    `<tr><td>${esc(m.name)}</td><td>${esc(m.value)}</td><td>${esc(m.delta || '')}</td></tr>`).join('');
+  return `<table class="metrics"><thead><tr><th>Metric</th><th>Value</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function notesList(notes) {
+  if (!Array.isArray(notes) || !notes.length) return '';
+  return `<ul class="notes">${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>`;
+}
+
+function chartRow(chartIds, charts) {
+  if (!Array.isArray(chartIds) || !chartIds.length) return '';
+  const byId = Object.fromEntries((charts || []).map(c => [c.id, c]));
+  const cards = chartIds.map(id => {
+    const c = byId[id]; if (!c) return '';
+    return `<div class="chart-card"><h4>${esc(c.title)}</h4><div class="chart-wrap"><canvas id="chart-${esc(c.id)}"></canvas></div></div>`;
+  }).join('');
+  return cards ? `<div class="chart-row">${cards}</div>` : '';
+}
+
+function execSummary(items) {
+  if (!Array.isArray(items) || !items.length) return '';
+  return `<section class="exec"><div class="eyebrow">Executive summary</div>
+    <ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></section>`;
+}
+
 function northStar(ns) {
   if (!ns) return '';
   const pct = ns.goal ? Math.min(100, Math.round((Number(ns.current) / Number(ns.goal)) * 100)) : 0;
-  const fmt = (n) => (ns.unit || '') + Number(n).toLocaleString();
+  const fmt = n => (ns.unit || '') + Number(n).toLocaleString();
   return `<section class="northstar">
     <div class="ns-top"><span class="ns-label">${esc(ns.label || 'Goal')}</span>
-      <span class="ns-val">${esc(fmt(ns.current))} <span class="ns-goal">/ ${esc(fmt(ns.goal))}</span></span></div>
+      <span class="ns-val"><span class="num">${esc(fmt(ns.current))}</span> <span class="ns-goal">/ ${esc(fmt(ns.goal))}</span></span></div>
     <div class="progress"><div class="bar" style="width:${pct}%"></div></div>
-    <div class="ns-note">${esc(ns.note || '')}${ns.note ? ' &middot; ' : ''}${pct}% there</div></section>`;
+    <div class="ns-note">${esc(ns.note || '')}${ns.note ? ' · ' : ''}${pct}% there</div></section>`;
 }
 
-function kpiTiles(kpis) {
+function kpiStrip(kpis) {
   if (!Array.isArray(kpis) || !kpis.length) return '';
-  const tiles = kpis.map(k => `<div class="kpi ${esc(k.status || 'neutral')}">
-    <div class="kpi-label">${esc(k.label)}</div>
-    <div class="kpi-val">${esc(k.value)}</div>
-    <div class="kpi-delta">${esc(k.delta || '')}</div>
+  return `<section class="kpis">${kpis.map(k => `<div class="kpi ${esc(k.status || 'neutral')}">
+    <div class="label">${esc(k.label)}</div><div class="value num">${esc(k.value)}</div><div class="delta">${esc(k.delta || '')}</div>
     ${Array.isArray(k.spark) && k.spark.length ? `<canvas class="spark" data-spark="${esc(JSON.stringify(k.spark))}"></canvas>` : ''}
-  </div>`).join('');
-  return `<h2 class="sec">Master overview</h2><section class="kpi-grid">${tiles}</section>`;
+  </div>`).join('')}</section>`;
 }
 
-function chartsGrid(charts) {
-  if (!Array.isArray(charts) || !charts.length) return '';
-  const cards = charts.map(c => `<div class="chart-card"><h3>${esc(c.title)}</h3>
-    <div class="chart-wrap"><canvas id="chart-${esc(c.id)}"></canvas></div></div>`).join('');
-  return `<h2 class="sec">Trends &amp; breakdowns</h2><section class="charts-grid">${cards}</section>`;
-}
-
-function decisions(items) {
+function decisionsSection(items) {
   if (!Array.isArray(items) || !items.length) return '';
-  const rows = items.map(d => `<tr><td><strong>${esc(d.item)}</strong></td><td>${esc(d.lens)}</td><td>${esc(d.why)}</td></tr>`).join('');
-  return `<section class="card decide"><h2 class="sec">Needs a decision</h2>
-    <table><thead><tr><th>Item</th><th>Lens</th><th>Why now</th></tr></thead><tbody>${rows}</tbody></table></section>`;
+  const rows = items.map(d => `<tr><td><strong>${esc(d.item)}</strong></td><td>${esc(d.lens || '')}</td><td>${esc(d.why || '')}</td></tr>`).join('');
+  const body = `<table class="metrics"><thead><tr><th>Decision</th><th>Area</th><th>Why now</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return section('Needs your decision', `${items.length} open`, body, { cls: 'decide' });
 }
 
-function lensCard(key, title, lenses) {
-  const l = (lenses || {})[key]; if (!l) return '';
-  const metrics = (l.metrics || []).map(m =>
-    `<tr><td>${esc(m.name)}</td><td>${esc(m.value)}</td><td>${esc(m.delta || '')}</td><td>${m.flag ? `<span class="flag ${esc(m.flag)}">${esc(m.flag)}</span>` : ''}</td></tr>`).join('');
-  const items = (l.items || []).map(i =>
-    `<li><span class="flag ${esc(i.urgency || '')}">${esc(i.urgency || '')}</span> ${esc(i.summary)}</li>`).join('');
-  return `<section class="card lens ${esc(key)}"><h2 class="sec">${esc(title)}</h2>
-    ${l.narrative ? `<p>${esc(l.narrative)}</p>` : ''}
-    ${metrics ? `<table><thead><tr><th>Metric</th><th>Value</th><th>&Delta;</th><th></th></tr></thead><tbody>${metrics}</tbody></table>` : ''}
-    ${items ? `<ul>${items}</ul>` : ''}</section>`;
+function storeSection(store, charts) {
+  if (!store) return '';
+  const body = metricsTable(store.metrics) + chartRow(store.chartIds, charts) + notesList(store.notes);
+  return section(store.title || 'Shopify Store', store.sub || '', body);
 }
 
-function socials(list) {
-  if (!Array.isArray(list) || !list.length) return '';
-  const cards = list.map(s => `<div class="mini"><div class="t">${esc(s.platform)}</div>
-    <div class="s">${esc(s.followers)}</div><div class="d">${esc(s.handle || '')} &middot; ${esc(s.delta || '')}</div>
-    <div class="n">${esc(s.note || '')}</div></div>`).join('');
-  return `<h2 class="sec">Social channels</h2><section class="grid3">${cards}</section>`;
+function onlineSection(op, charts) {
+  if (!op) return '';
+  const signals = Array.isArray(op.clarity) && op.clarity.length
+    ? `<div class="signals">${op.clarity.map(s => `<div class="sig ${esc(s.status || '')}"><div class="v num">${esc(s.value)}</div><div class="l">${esc(s.name)}</div></div>`).join('')}</div>`
+    : '';
+  const body = metricsTable(op.metrics) + chartRow(op.chartIds, charts) + signals + notesList(op.notes);
+  return section(op.title || 'Website & online presence', op.sub || '', body);
 }
 
-function competitors(list, landscape) {
+function channelSection(ch, charts) {
+  const body = (ch.headline ? `<div class="ch-headline num">${esc(ch.headline)}</div>` : '')
+    + metricsTable(ch.metrics) + chartRow(ch.chartIds, charts) + notesList(ch.notes);
+  return section(ch.name || ch.id, ch.sub || '', body);
+}
+
+function competitorsSection(list, landscape) {
   if ((!Array.isArray(list) || !list.length) && !landscape) return '';
-  const cards = (list || []).map(c => `<div class="mini comp">
-    <div class="t">${esc(c.name)} <span class="threat ${esc(c.threat || 'med')}">${c.threat === '—' || !c.threat ? 'us' : esc(c.threat)}</span></div>
-    <div class="s">${esc(c.price)}</div>
-    <div class="d">${esc(c.preorders || '')} &middot; ${esc(c.form || '')}</div>
+  const cards = (list || []).map(c => `<div class="cardlet">
+    <div class="t">${esc(c.name)} <span class="badge ${c.threat === '—' || !c.threat ? 'us' : esc(c.threat)}">${c.threat === '—' || !c.threat ? 'us' : esc(c.threat)}</span></div>
+    <div class="p num">${esc(c.price)}</div><div class="d">${esc(c.preorders || '')} · ${esc(c.form || '')}</div>
     <div class="n">${esc(c.cert || '')}${c.cert ? ' — ' : ''}${esc(c.note || '')}</div></div>`).join('');
-  return `<h2 class="sec">Competitor landscape</h2>
-    ${list && list.length ? `<section class="grid3">${cards}</section>` : ''}
-    ${landscape ? `<section class="card landscape">${esc(landscape)}</section>` : ''}`;
+  const body = (cards ? `<div class="cards">${cards}</div>` : '') + (landscape ? `<p class="note">${esc(landscape)}</p>` : '');
+  return section('Competitor landscape', '', body);
 }
 
-function simpleList(title, arr, ordered) {
+function manufacturingSection(m) {
+  if (!m) return '';
+  const tl = Array.isArray(m.timeline) && m.timeline.length
+    ? `<ul class="timeline">${m.timeline.map(t => `<li><span class="dot ${esc(t.status || '')}"></span><span class="it">${esc(t.item)}</span><span class="eta num">${esc(t.eta)}</span></li>`).join('')}</ul>`
+    : '';
+  const cd = (m.daysToShip != null)
+    ? `<div class="countdown"><span class="big num">${esc(m.daysToShip)}</span><span class="lbl">days to ship · target ${esc(m.shipDate || '')}</span></div>` : '';
+  const cost = (m.cog || m.margin)
+    ? `<p class="note">COG ${esc(m.cog || '')} · margin ${esc(m.margin || '')}</p>` : '';
+  const body = cd + tl + cost + notesList(m.notes);
+  return section('Manufacturing', m.status ? m.status + ' · ship ' + (m.shipDate || '') : '', body);
+}
+
+function inboxSection(inbox) {
+  const items = inbox && Array.isArray(inbox.items) ? inbox.items : null;
+  if (!items || !items.length) return '';
+  const body = `<ul class="notes">${items.map(i => `<li><strong>${esc(i.urgency || '')}</strong> — ${esc(i.summary)}</li>`).join('')}</ul>`;
+  return section('Inbox & comms', '', body);
+}
+
+function listSection(title, arr, ordered) {
   if (!Array.isArray(arr) || !arr.length) return '';
-  const tag = ordered ? 'ol' : 'ul';
-  return `<section class="card ${ordered ? 'actions' : ''}"><h2 class="sec">${esc(title)}</h2>
-    <${tag}>${arr.map(x => `<li>${esc(x)}</li>`).join('')}</${tag}></section>`;
+  const body = ordered
+    ? `<ol class="actions">${arr.map(x => `<li>${esc(x)}</li>`).join('')}</ol>`
+    : `<ul class="angle">${arr.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+  return section(title, '', body);
 }
 
-function sourcesFooter(b) {
+function footer(b) {
   const src = b.sources || {};
   const chips = Object.keys(src).map(k => `<span class="src ${src[k] === 'ok' ? 'ok' : 'bad'}">${esc(k)}</span>`).join('');
-  const issues = (b.toolIssues || []).length ? ` &middot; issues: ${(b.toolIssues || []).map(esc).join('; ')}` : '';
-  return `<footer>Sources: ${chips}${issues}<br>Generated ${esc(b.generatedAt || '')}</footer>`;
+  return `<footer>Sources ${chips}<br>Edition ${esc(b.edition)} · generated ${esc(b.generatedAt || '')}</footer>`;
 }
 
 export function buildBriefHTML(b) {
-  const headline = (b.headline || []).map(h => `<li>${esc(h)}</li>`).join('');
+  const channels = (b.channels || []).map(ch => channelSection(ch, b.charts)).join('');
+  // back-compat: render legacy lenses only if the new sections are absent
+  const legacy = (!b.store && !b.channels && b.lenses)
+    ? ['cmo', 'cfo', 'cto'].map(k => b.lenses[k] ? section(k.toUpperCase(), '', (b.lenses[k].narrative ? `<p class="note">${esc(b.lenses[k].narrative)}</p>` : '') + metricsTable(b.lenses[k].metrics)) : '').join('')
+    : '';
   return `
-    <header class="top"><h1>EB Master Dashboard</h1>
-      <span class="meta">Edition ${esc(b.edition)} &middot; ${esc(b.date)}</span></header>
+    <header class="brand"><h1><span class="mark">Easi Breezi</span> · Master Dashboard</h1>
+      <span class="ed num">Edition ${esc(b.edition)} · ${esc(b.date)}</span></header>
+    ${execSummary(b.executiveSummary || b.headline)}
     ${northStar(b.northStar)}
-    ${headline ? `<section class="card"><h2 class="sec">Headline</h2><ul>${headline}</ul></section>` : ''}
-    ${decisions(b.needsDecision)}
-    ${kpiTiles(b.kpis)}
-    ${chartsGrid(b.charts)}
-    ${lensCard('cmo', 'CMO — Demand &amp; Marketing', b.lenses)}
-    ${lensCard('cfo', 'CFO — Money', b.lenses)}
-    ${lensCard('cto', 'CTO — Product / Tech / Ops', b.lenses)}
-    ${lensCard('inbox', 'Inbox &amp; Comms', b.lenses)}
-    ${socials(b.socials)}
-    ${competitors(b.competitors, b.landscape)}
-    ${simpleList('Today’s content angle', b.contentAngle, false)}
-    ${simpleList('Action stack', b.actionStack, true)}
-    ${sourcesFooter(b)}
+    ${decisionsSection(b.needsDecision)}
+    ${kpiStrip(b.kpis)}
+    ${storeSection(b.store, b.charts)}
+    ${onlineSection(b.onlinePresence, b.charts)}
+    ${channels}
+    ${legacy}
+    ${competitorsSection(b.competitors, b.landscape)}
+    ${manufacturingSection(b.manufacturing)}
+    ${inboxSection(b.inbox || (b.lenses && b.lenses.inbox))}
+    ${listSection('Today’s content angle', b.contentAngle, false)}
+    ${listSection('Action stack', b.actionStack, true)}
+    ${footer(b)}
   `;
 }
 
 // ---- browser-only chart rendering (skipped under node:test) ----
 function renderCharts(brief) {
   if (typeof window === 'undefined' || !window.Chart) return;
-  const palette = ['#58a6ff', '#3fb950', '#e3b341', '#f85149', '#bc8cff', '#39c5cf'];
+  const C = window.Chart;
+  C.defaults.color = '#9aa3af';
+  C.defaults.font.family = "-apple-system,BlinkMacSystemFont,Segoe UI,Inter,sans-serif";
+  const palette = ['#5b9bf0', '#3fb8b0', '#c9a227', '#9b8cf0', '#3aa675', '#e0524b'];
 
   document.querySelectorAll('canvas.spark').forEach(cv => {
     let data = []; try { data = JSON.parse(cv.dataset.spark || '[]'); } catch { data = []; }
-    new window.Chart(cv, {
-      type: 'line',
-      data: { labels: data.map((_, i) => i), datasets: [{ data, borderColor: '#58a6ff', borderWidth: 2, pointRadius: 0, tension: .35, fill: false }] },
-      options: { plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } }, responsive: true, maintainAspectRatio: false }
-    });
+    new C(cv, { type: 'line', data: { labels: data.map((_, i) => i), datasets: [{ data, borderColor: '#5b9bf0', borderWidth: 1.5, pointRadius: 0, tension: .4, fill: false }] },
+      options: { plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } }, responsive: true, maintainAspectRatio: false } });
   });
 
   (brief.charts || []).forEach(c => {
@@ -126,17 +176,13 @@ function renderCharts(brief) {
       label: d.label, data: d.data,
       backgroundColor: c.type === 'doughnut' ? palette : (d.color || palette[i % palette.length]),
       borderColor: d.color || palette[i % palette.length], borderWidth: 2,
-      pointRadius: c.type === 'line' ? 2 : 0, tension: .3, fill: false
+      pointRadius: c.type === 'line' ? 0 : 0, tension: .35, fill: false, borderRadius: c.type === 'bar' ? 4 : 0
     }));
-    new window.Chart(el, {
-      type: c.type || 'line',
-      data: { labels: c.labels, datasets },
+    new C(el, { type: c.type || 'line', data: { labels: c.labels, datasets },
       options: {
-        plugins: { legend: { display: c.type === 'doughnut' || (c.datasets || []).length > 1, labels: { color: '#93a0b4' } } },
-        scales: c.type === 'doughnut' ? {} : { x: { ticks: { color: '#93a0b4' }, grid: { color: '#27303f' } }, y: { ticks: { color: '#93a0b4' }, grid: { color: '#27303f' } } },
-        responsive: true, maintainAspectRatio: false
-      }
-    });
+        plugins: { legend: { display: c.type === 'doughnut' || (c.datasets || []).length > 1, position: c.type === 'doughnut' ? 'right' : 'top', labels: { boxWidth: 10, boxHeight: 10, font: { size: 11 } } } },
+        scales: c.type === 'doughnut' ? {} : { x: { grid: { display: false }, ticks: { font: { size: 11 } } }, y: { grid: { color: '#20242b' }, ticks: { font: { size: 11 } }, beginAtZero: true } },
+        responsive: true, maintainAspectRatio: false, cutout: c.type === 'doughnut' ? '62%' : undefined } });
   });
 }
 

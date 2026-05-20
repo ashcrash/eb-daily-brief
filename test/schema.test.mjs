@@ -7,20 +7,10 @@ const valid = {
   date: '2026-05-20',
   generatedAt: '2026-05-20T00:05:00Z',
   headline: ['x'],
-  needsDecision: [],
-  lenses: {
-    cmo: { metrics: [], narrative: '' },
-    cfo: { metrics: [], narrative: '' },
-    cto: { metrics: [], narrative: '' },
-    inbox: { items: [] }
-  },
-  contentAngle: [],
-  actionStack: [],
-  toolIssues: [],
   sources: { ga4: 'ok' }
 };
 
-test('valid brief passes', () => {
+test('valid core brief passes', () => {
   const r = validateBrief(valid);
   assert.equal(r.valid, true, r.errors.join('; '));
 });
@@ -37,24 +27,26 @@ test('bad date format fails', () => {
   assert.equal(validateBrief(b).valid, false);
 });
 
-test('missing inbox lens fails', () => {
-  const b = structuredClone(valid); delete b.lenses.inbox;
-  const r = validateBrief(b);
-  assert.equal(r.valid, false);
-  assert.ok(r.errors.some(e => e.includes('inbox')));
+test('headline is optional (executiveSummary supersedes it)', () => {
+  const b = structuredClone(valid); delete b.headline;
+  assert.equal(validateBrief(b).valid, true);
 });
 
 test('non-object returns invalid not throw', () => {
   assert.equal(validateBrief(null).valid, false);
 });
 
-test('brief with rich optional fields validates', () => {
+test('full v3 brief with all optional sections validates', () => {
   const b = structuredClone(valid);
+  b.executiveSummary = ['x'];
   b.kpis = [{ label: 'x', value: '1' }];
-  b.charts = [{ id: 'c', title: 't', type: 'line', labels: [], datasets: [] }];
-  b.socials = [{ platform: 'IG', followers: '1' }];
+  b.charts = [{ id: 'c', title: 't', type: 'bar', labels: [], datasets: [] }];
+  b.channels = [{ id: 'instagram', name: 'Instagram' }];
+  b.store = { title: 'Shopify', metrics: [] };
+  b.onlinePresence = { title: 'Web', metrics: [] };
+  b.manufacturing = { shipDate: '2026-06-25', daysToShip: 36 };
   b.competitors = [{ name: 'Zyon', price: '$935' }];
-  b.northStar = { label: 'goal', current: 1, goal: 10 };
+  b.northStar = { label: 'g', current: 1, goal: 10 };
   b.landscape = 'note';
   const r = validateBrief(b);
   assert.equal(r.valid, true, r.errors.join('; '));
@@ -62,6 +54,11 @@ test('brief with rich optional fields validates', () => {
 
 test('kpis must be an array if present', () => {
   const b = structuredClone(valid); b.kpis = 'nope';
+  assert.equal(validateBrief(b).valid, false);
+});
+
+test('store must be an object if present', () => {
+  const b = structuredClone(valid); b.store = ['nope'];
   assert.equal(validateBrief(b).valid, false);
 });
 
