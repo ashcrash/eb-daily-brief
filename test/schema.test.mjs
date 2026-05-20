@@ -47,3 +47,25 @@ test('missing inbox lens fails', () => {
 test('non-object returns invalid not throw', () => {
   assert.equal(validateBrief(null).valid, false);
 });
+
+test('brief with rich optional fields validates', () => {
+  const b = structuredClone(valid);
+  b.kpis = [{ label: 'x', value: '1' }];
+  b.charts = [{ id: 'c', title: 't', type: 'line', labels: [], datasets: [] }];
+  b.socials = [{ platform: 'IG', followers: '1' }];
+  b.competitors = [{ name: 'Zyon', price: '$935' }];
+  b.northStar = { label: 'goal', current: 1, goal: 10 };
+  b.landscape = 'note';
+  const r = validateBrief(b);
+  assert.equal(r.valid, true, r.errors.join('; '));
+});
+
+test('kpis must be an array if present', () => {
+  const b = structuredClone(valid); b.kpis = 'nope';
+  assert.equal(validateBrief(b).valid, false);
+});
+
+test('northStar must be an object if present', () => {
+  const b = structuredClone(valid); b.northStar = 'nope';
+  assert.equal(validateBrief(b).valid, false);
+});

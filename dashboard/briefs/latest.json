@@ -1,88 +1,118 @@
 {
-  "edition": 3,
-  "date": "2026-05-21",
-  "generatedAt": "2026-05-21T00:05:00Z",
+  "edition": 4,
+  "date": "2026-05-20",
+  "generatedAt": "2026-05-20T12:00:00Z",
+  "northStar": {
+    "label": "Pre-order revenue to the £200k milestone",
+    "current": 5095,
+    "goal": 200000,
+    "unit": "$",
+    "note": "Shopify $2,009 (12 paid) + Kickstarter $3,086 (20 backers)"
+  },
   "headline": [
-    "Auto-update pipeline test — this entry was written by publish/run.mjs (real data resumes on the next scheduled run)",
-    "Still 0 orders — last #1017, 2026-05-10",
-    "EB25 (25% off) expires today"
+    "The 05-19 LP hotfix worked — Clarity scroll recovered, errors near zero",
+    "Still 0 orders in 10 days (last #1017, 2026-05-10)",
+    "EB25 (25% off) has 0 uses and expires Friday 2026-05-22",
+    "Demand is the bottleneck: social reach and email opens are not converting to clicks"
   ],
   "needsDecision": [
-    {
-      "item": "Decide EB25 before it lapses",
-      "lens": "CMO/CFO",
-      "why": "Expires 2026-05-22"
-    }
+    { "item": "Decide EB25 — extend / relaunch with a push / let it lapse", "lens": "CMO/CFO", "why": "Expires Friday, 0 uses" },
+    { "item": "Reply to Tapan (UCS, Bangladesh distributor)", "lens": "Inbox", "why": "Awaiting your reply; do not let it drift" },
+    { "item": "Chase Minewing on the cert clarification", "lens": "CTO", "why": "Assembly PI on hold since 05-18 — ship-date risk" }
+  ],
+  "kpis": [
+    { "label": "Sessions (7d)", "value": "183", "delta": "+19 vs prior", "status": "neutral", "spark": [164, 170, 150, 183] },
+    { "label": "Conversion rate", "value": "~0%", "delta": "10 days dry", "status": "bad", "spark": [1.05, 0.2, 0.77, 0] },
+    { "label": "Orders (7d)", "value": "0", "delta": "last 05-10", "status": "bad", "spark": [1, 1, 0, 0] },
+    { "label": "IG followers", "value": "2,156", "delta": "+30", "status": "good", "spark": [2126, 2138, 2150, 2156] },
+    { "label": "Email click rate", "value": "~0%", "delta": "opens 33-40%", "status": "bad", "spark": [0, 0, 0, 1, 2] },
+    { "label": "Brevo sends left", "value": "53", "delta": "of 500/mo", "status": "warn", "spark": [96, 70, 53] },
+    { "label": "Ship date", "value": "Jun 25", "delta": "amber — on track", "status": "warn" },
+    { "label": "SEO health", "value": "52/100", "delta": "flat", "status": "warn", "spark": [58, 52] }
+  ],
+  "charts": [
+    { "id": "channels", "title": "Sessions by channel (7d, GA4)", "type": "doughnut",
+      "labels": ["Direct (untracked)", "Organic Shopping", "Organic Search", "Organic Social", "Other"],
+      "datasets": [{ "label": "Sessions", "data": [129, 13, 11, 10, 20] }] },
+    { "id": "funnel", "title": "Funnel last 7d (Clarity + Shopify)", "type": "bar",
+      "labels": ["LP sessions", "Build-your-kit", "Reached cart", "Paid order"],
+      "datasets": [{ "label": "Sessions", "data": [83, 28, 1, 0], "color": "#58a6ff" }] },
+    { "id": "gsc", "title": "Search Console — weekly", "type": "line",
+      "labels": ["wk1", "wk2", "wk3", "wk4"],
+      "datasets": [
+        { "label": "Clicks", "data": [16, 12, 16, 15], "color": "#3fb950" },
+        { "label": "Impressions", "data": [194, 210, 194, 258], "color": "#58a6ff" }
+      ] },
+    { "id": "email", "title": "Email — opens vs clicks", "type": "bar",
+      "labels": ["05-05", "05-06", "05-07", "05-09", "05-12"],
+      "datasets": [
+        { "label": "Open %", "data": [39, 39, 33, 36, 36], "color": "#e3b341" },
+        { "label": "Clicks", "data": [0, 0, 0, 1, 2], "color": "#f85149" }
+      ] },
+    { "id": "ig", "title": "Instagram followers", "type": "line",
+      "labels": ["May 3", "May 10", "May 20"],
+      "datasets": [{ "label": "Followers", "data": [2126, 2140, 2156], "color": "#bc8cff" }] }
   ],
   "lenses": {
     "cmo": {
-      "narrative": "Pipeline self-test edition. Metrics carried from Edition 2.",
+      "narrative": "Funnel is fixed (scroll recovered post-hotfix) but demand is flat. SEO is ~90% brand-only; comparison keywords rank page-1 with 0 clicks. Email opens 33-40% but clicks near zero — the leak is open-to-click, not deliverability.",
       "metrics": [
-        {
-          "name": "IG followers",
-          "value": "2,156",
-          "prior": "2,156",
-          "delta": "0",
-          "flag": ""
-        },
-        {
-          "name": "GSC clicks (7d)",
-          "value": "15",
-          "prior": "15",
-          "delta": "0",
-          "flag": ""
-        }
+        { "name": "IG followers", "value": "2,156", "prior": "2,126", "delta": "+30", "flag": "" },
+        { "name": "YouTube views", "value": "170,854", "prior": "169,000", "delta": "+1.9k", "flag": "" },
+        { "name": "GSC clicks (7d)", "value": "15", "prior": "12", "delta": "+3", "flag": "" },
+        { "name": "GSC avg position", "value": "6.0", "prior": "8.8", "delta": "improved", "flag": "" },
+        { "name": "Brevo sends left", "value": "53", "prior": "96", "delta": "-43", "flag": "low" }
       ]
     },
     "cfo": {
-      "narrative": "Lifetime Shopify: 12 paid pre-orders, ~$2,009.",
+      "narrative": "Lifetime Shopify: 12 paid pre-orders, ~$2,009, AOV $167. Zero new in 10 days. COG $15.91/unit, 90.6% margin at $170. At-risk capital $560 (Ailixin magnet).",
       "metrics": [
-        {
-          "name": "Orders (7d)",
-          "value": "0",
-          "prior": "0",
-          "delta": "0",
-          "flag": "dry"
-        }
+        { "name": "Orders (7d)", "value": "0", "prior": "0", "delta": "flat", "flag": "dry" },
+        { "name": "Per-unit COG", "value": "$15.91", "prior": "$15.91", "delta": "0", "flag": "" },
+        { "name": "Investor pipeline", "value": "2 warm / 0 committed", "prior": "2 / 0", "delta": "0", "flag": "warn" }
       ]
     },
     "cto": {
-      "narrative": "Ship amber ~2026-06-25. Wires land 05-31.",
+      "narrative": "Ship amber, ~Jun 25. Wires (Hongxin) land 05-31. Real slip-risks: Minewing assembly PI on hold (cert reply) and Shopify-to-NSS integration not hooked up. GA4 Data API fixed today.",
       "metrics": [
-        {
-          "name": "Ship date",
-          "value": "amber ~06-25",
-          "prior": "amber",
-          "delta": "0",
-          "flag": ""
-        }
+        { "name": "Ship date", "value": "~Jun 25", "prior": "~Jun 25", "delta": "0", "flag": "warn" },
+        { "name": "Pixels", "value": "Meta/GA4/Clarity ok", "prior": "—", "delta": "TikTok pending", "flag": "" },
+        { "name": "SEO health", "value": "52/100", "prior": "52", "delta": "0", "flag": "warn" }
       ]
     },
     "inbox": {
       "items": [
-        {
-          "summary": "Tapan (UCS) reply still pending",
-          "urgency": "high"
-        }
+        { "summary": "Tapan (UCS distributor) re-reply — needs your response", "urgency": "high" },
+        { "summary": "A sent email bounced (mailer-daemon) — check which", "urgency": "medium" },
+        { "summary": "Kevin: IP67-strip on labels in progress + video update awaiting review", "urgency": "medium" },
+        { "summary": "Meta blue-badge phishing email — ignore", "urgency": "ignore" }
       ]
     }
   },
+  "socials": [
+    { "platform": "Instagram", "handle": "@easi.breezi", "followers": "2,156", "delta": "+30 since May 3", "note": "3 viral Reels drove 1.6M reach + 263 follows in 6 weeks" },
+    { "platform": "YouTube", "handle": "@EasiBreeziOfficial", "followers": "36 subs", "delta": "170,854 views", "note": "92 videos, idle since Jan — mirror IG winners" },
+    { "platform": "TikTok", "handle": "@easi_breezi", "followers": "pixel pending", "delta": "contract pending", "note": "repurpose top IG Reels (no watermark)" },
+    { "platform": "Email list (Brevo)", "handle": "13.4k contacts", "delta": "Master 329 (+2)", "note": "12,926 cold Kickstarter backers — biggest untapped asset" }
+  ],
+  "competitors": [
+    { "name": "Zyon Helmets", "price": "~$935", "preorders": "4,000+", "form": "whole new helmet", "cert": "ECE 22.06 + MIPS", "threat": "high", "note": "Press in MCN, T3, Visordown, RideApart. App = AQI + filter-replace alerts. Their moat is press parity + app." },
+    { "name": "BluArmor (BluSnap)", "price": "~$70", "preorders": "established (India)", "form": "helmet air circulator", "cert": "cooling, not filtration", "threat": "med", "note": "Adjacent — cools/circulates but does not filter PM2.5. Different job; watch positioning." },
+    { "name": "Easi Breezi (us)", "price": "$127.50", "preorders": "~32 (Shopify + KS)", "form": "modular clip-on", "cert": "HEPA H11, IP pending", "threat": "—", "note": "8.5x cheaper than Zyon, fits any helmet. Edge = modular + price + filtration." }
+  ],
+  "landscape": "Zyon's 4,000+ pre-orders prove the category is real — and their biggest advantage over us is press parity (6+ outlets vs our 1) plus a companion app. Our wedge is modular + 8.5x cheaper + true HEPA filtration (vs BluArmor which only cools). SE Asia haze season is a demand tailwind. Priority: pitch MCN / RideApart / Visordown to close the press gap, and bring the smart/app roadmap forward in messaging.",
   "contentAngle": [
-    "$935 Zyon helmet vs $127.50 clip-on"
+    "There is a $935 air-purifying helmet now (Zyon). Or keep your helmet and clip this on for $127.50.",
+    "Two-wheeler riders breathe 7.7x more particulates than car drivers (2,860 vs 370 ug/m3)"
   ],
   "actionStack": [
-    "Decide EB25",
-    "Reply Tapan"
+    "Decide EB25 before Friday — extend, relaunch with a push, or lapse",
+    "Push demand onto the now-fixed funnel: small Brevo retest to the engaged cohort (within 53 sends)",
+    "Reply to Tapan + check the email bounce",
+    "Chase Minewing on the cert clarification to unblock the assembly PI",
+    "Nudge David Lai on the Shopify-to-NSS integration",
+    "Pitch MCN / RideApart / Visordown to close the press gap with Zyon"
   ],
   "toolIssues": [],
-  "sources": {
-    "shopify": "ok",
-    "ga4": "ok",
-    "gsc": "ok",
-    "brevo": "ok",
-    "clarity": "ok",
-    "instagram": "ok",
-    "youtube": "ok",
-    "zoho": "ok"
-  }
+  "sources": { "shopify": "ok", "ga4": "ok", "gsc": "ok", "clarity": "ok", "brevo": "ok", "instagram": "ok", "youtube": "ok", "zoho": "ok", "slack": "ok" }
 }
