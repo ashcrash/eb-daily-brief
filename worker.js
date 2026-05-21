@@ -1,43 +1,81 @@
-// Cloudflare Worker — Basic Auth gate in front of the static dashboard.
-// With assets.run_worker_first=true, this runs on EVERY request, so
-// briefs/latest.json (the sensitive data) is gated too — not just index.html.
-// Password comes from the DASH_PASSWORD env var (Workers project → Settings →
-// Variables and Secrets). It MUST be stored as an encrypted "Secret", NOT a
-// "Text" var: Workers Builds runs `wrangler deploy` on every git push, which
-// preserves Secrets but DROPS dashboard plaintext vars that aren't declared in
-// wrangler.jsonc — a plaintext DASH_PASSWORD gets wiped on the next daily
-// publish and fail-closes the dashboard to 503. Username is ignored; only the
-// password is checked.
-export default {
-  async fetch(request, env) {
-    const expected = env.DASH_PASSWORD;
+// Cloudflare Worker — gates the static dashboard, hardens responses, exposes
+// /healthz, records observability to KV, and self-monitors via cron.
+// Secrets: DASH_PASSWORD (required), SLACK_WEBHOOK_URL (optional).
+// Bindings: ASSETS (static), KV (observability — optional until bound),
+//           CF_VERSION_METADATA (build stamp).
+// DASH_PASSWORD MUST be an encrypted Secret, not a plaintext var: Workers Builds
+// runs `wrangler deploy` on every git push, which preserves Secrets but DROPS
+// plaintext vars not declared in wrangler.jsonc (would 503 the next deploy).
+import { basicAuthOk } from './shared/auth.mjs';
+import { securityHeaders } from './shared/security.mjs';
+import { buildHealthBody, isTopLevelPath, viewKey } from './shared/monitor.mjs';
 
-    // Fail closed: never serve content if no password is configured.
+function json(obj, status = 200, extra = {}) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { 'Content-Type': 'application/json; charset=UTF-8', ...securityHeaders(), ...extra }
+  });
+}
+
+function buildInfo(env) {
+  const m = env.CF_VERSION_METADATA;
+  return m ? { id: m.id || m.versionId || null, timestamp: m.timestamp || null, tag: m.tag || null } : null;
+}
+
+async function readLatest(env) {
+  try {
+    const res = await env.ASSETS.fetch(new Request('https://assets.local/briefs/latest.json'));
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+}
+
+async function serveAsset(request, env) {
+  const res = await env.ASSETS.fetch(request);
+  const h = new Headers(res.headers);
+  const sec = securityHeaders();
+  for (const k in sec) h.set(k, sec[k]);
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
+}
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    // 1) Unauthenticated health endpoint — freshness/build only, no business data.
+    if (path === '/healthz') {
+      const latest = await readLatest(env);
+      return json(buildHealthBody({ latest, build: buildInfo(env) }));
+    }
+
+    // 2) Auth gate (fail-closed).
+    const expected = env.DASH_PASSWORD;
     if (!expected) {
       return new Response('Dashboard locked: DASH_PASSWORD is not configured.', {
-        status: 503,
-        headers: { 'X-Robots-Tag': 'noindex, nofollow' }
+        status: 503, headers: securityHeaders()
+      });
+    }
+    if (!basicAuthOk(request.headers.get('Authorization'), expected)) {
+      return new Response('Authentication required.', {
+        status: 401,
+        headers: {
+          'WWW-Authenticate': 'Basic realm="EB Brief", charset="UTF-8"',
+          'Content-Type': 'text/plain',
+          ...securityHeaders()
+        }
       });
     }
 
-    const header = request.headers.get('Authorization') || '';
-    const [scheme, encoded] = header.split(' ');
-    if (scheme === 'Basic' && encoded) {
-      let decoded = '';
-      try { decoded = atob(encoded); } catch { decoded = ''; }
-      const password = decoded.slice(decoded.indexOf(':') + 1);
-      if (password && password === expected) {
-        return env.ASSETS.fetch(request); // authed → serve the static asset
-      }
+    // 3) Authed observability routes are added in a later task. For now, serve assets.
+    if (isTopLevelPath(path) && env.KV) {
+      ctx.waitUntil((async () => {
+        const date = new Date().toISOString().slice(0, 10);
+        const key = viewKey(date, path);
+        const cur = parseInt((await env.KV.get(key)) || '0', 10);
+        await env.KV.put(key, String(cur + 1), { expirationTtl: 60 * 60 * 24 * 90 });
+      })().catch(() => {}));
     }
-
-    return new Response('Authentication required.', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="EB Brief", charset="UTF-8"',
-        'X-Robots-Tag': 'noindex, nofollow',
-        'Content-Type': 'text/plain'
-      }
-    });
+    return serveAsset(request, env);
   }
 };
