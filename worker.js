@@ -8,7 +8,7 @@
 // plaintext vars not declared in wrangler.jsonc (would 503 the next deploy).
 import { basicAuthOk } from './shared/auth.mjs';
 import { securityHeaders } from './shared/security.mjs';
-import { buildHealthBody, isTopLevelPath, viewKey, errorKey, feedbackKey } from './shared/monitor.mjs';
+import { buildHealthBody, isTopLevelPath, viewKey, errorKey, feedbackKey, shouldAlert, slackStaleText, slackDownText } from './shared/monitor.mjs';
 
 function json(obj, status = 200, extra = {}) {
   return new Response(JSON.stringify(obj), {
@@ -110,5 +110,32 @@ export default {
       })().catch(() => {}));
     }
     return serveAsset(request, env);
+  },
+
+  // Cron (wrangler triggers.crons): freshness watchdog → Slack alert (de-duped).
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil((async () => {
+      const latest = await readLatest(env);
+      const health = buildHealthBody({ latest, build: buildInfo(env) });
+      const nowIso = new Date().toISOString();
+      if (env.KV) {
+        await env.KV.put('monitor:lastCheck', nowIso);
+        await env.KV.put('monitor:lastStatus', JSON.stringify(health));
+      }
+      const problem = !latest || !health.fresh;
+      if (!problem) return;
+      const lastAlertedAt = env.KV ? await env.KV.get('monitor:lastAlertedAt') : null;
+      if (!shouldAlert(lastAlertedAt, Date.parse(nowIso))) return;
+      if (env.SLACK_WEBHOOK_URL) {
+        const text = !latest ? slackDownText() : slackStaleText(health);
+        try {
+          await fetch(env.SLACK_WEBHOOK_URL, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+          });
+          if (env.KV) await env.KV.put('monitor:lastAlertedAt', nowIso);
+        } catch { /* webhook failure must not throw the cron */ }
+      }
+    })().catch(() => {}));
   }
 };
