@@ -1,7 +1,7 @@
 {
   "edition": 6,
   "date": "2026-05-21",
-  "generatedAt": "2026-05-21T12:00:00Z",
+  "generatedAt": "2026-05-21T05:00:00Z",
   "executiveSummary": [
     "Demand is the constraint, not the product. The funnel is fixed (LP crash + price bug resolved 05-19) but there have been no orders in 11 days.",
     "Every channel still leaks at the same step — the click-through. Social reach, email opens (33–40%) and SEO impressions all convert to near-zero clicks to site.",
@@ -643,8 +643,8 @@
     "shipDate": "2026-06-25",
     "daysToShip": 35,
     "status": "amber",
-    "cog": "$15.91/unit",
-    "margin": "90.6% @ $170",
+    "cog": "$15.83/unit",
+    "margin": "90.7% @ $170",
     "timeline": [
       {
         "item": "Tube (Yimi Care)",
@@ -657,13 +657,23 @@
         "status": "green"
       },
       {
+        "item": "Braid + heat-shrink",
+        "eta": "received 05-21",
+        "status": "green"
+      },
+      {
+        "item": "Retail box samples",
+        "eta": "arrived — approve by ~Jun 3",
+        "status": "amber"
+      },
+      {
         "item": "Fan / button / seals",
-        "eta": "arrived — QC",
+        "eta": "past ETA — confirm",
         "status": "amber"
       },
       {
         "item": "Magnet (Ailixin)",
-        "eta": "~May 22 (tmrw)",
+        "eta": "~May 22",
         "status": "red"
       },
       {
@@ -673,14 +683,16 @@
       },
       {
         "item": "Final assembly (Minewing)",
-        "eta": "PI on hold",
+        "eta": "PI on hold (cert)",
         "status": "red"
       }
     ],
     "notes": [
-      "Minewing assembly PI on hold pending cert clarification (since 05-18) — top ship-date risk.",
+      "Box samples arrived 05-21 — approve by ~Jun 3 to hold ship (15d mfg + 2d delivery).",
+      "Wires (Hongxin) ETA 05-31 is the binding constraint; open: did the harnesses land with the received braid + heat-shrink?",
+      "Minewing assembly PI on hold pending cert clarification — top ship-date risk.",
       "Shopify→NextSmartShip integration not hooked up — P0 before the June ship.",
-      "At-risk capital $560 (Ailixin magnet, supplier identity unverified)."
+      "Nylon wire dropped → COG $15.83; braid + heat-shrink received (BoM lines complete)."
     ]
   },
   "inbox": {
