@@ -4,3 +4,4 @@ node_modules/
 .DS_Store
 incoming-brief.json
 .netlify/
+.worktrees/
