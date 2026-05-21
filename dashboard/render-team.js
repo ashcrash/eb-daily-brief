@@ -62,13 +62,8 @@ export function renderTeam(latest, team) {
   return `
     <header class="topbar">
       <div class="logo"><span class="m-logo">👥 Easi Breezi</span><span class="wm-sub">Team &amp; Budget</span></div>
-      <div class="controls"><a class="m-back" href="./index.html">← Master</a>${freshnessBadge(latest.generatedAt)}</div>
+      <div class="controls">${freshnessBadge(latest.generatedAt)}</div>
     </header>
-    <nav class="drilldown"><span class="dd-label">Drill into detail</span>
-      <a class="dd-link" href="./marketing-hub.html">🎯 Marketing Hub</a>
-      <a class="dd-link" href="./sales-funnel.html">🛒 Sales &amp; Shopify</a>
-      <a class="dd-link" href="./stats.html">📈 Stats</a>
-    </nav>
     <div class="m-stats">${stats}</div>
     ${peopleHtml(team.people)}
     ${adHtml(team.adChannels)}

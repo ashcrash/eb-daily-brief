@@ -47,3 +47,8 @@ test('does NOT contain the old hardcoded drift number 2,126', () => {
 test('safe on empty inputs', () => {
   assert.doesNotThrow(() => renderMarketing({}, {}));
 });
+test('is sealed — no back button or cross-page nav', () => {
+  const html = renderMarketing(latest, marketing);
+  assert.doesNotMatch(html, /m-back/);
+  assert.doesNotMatch(html, /class="drilldown"/);
+});

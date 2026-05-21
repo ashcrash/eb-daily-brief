@@ -89,13 +89,8 @@ export function renderSales(latest, sales) {
   return `
     <header class="topbar">
       <div class="logo"><span class="m-logo">🛒 Easi Breezi</span><span class="wm-sub">Sales &amp; Shopify</span></div>
-      <div class="controls"><a class="m-back" href="./index.html">← Master</a>${freshnessBadge(latest.generatedAt)}</div>
+      <div class="controls">${freshnessBadge(latest.generatedAt)}</div>
     </header>
-    <nav class="drilldown"><span class="dd-label">Drill into detail</span>
-      <a class="dd-link" href="./marketing-hub.html">🎯 Marketing Hub</a>
-      <a class="dd-link" href="./team-budget.html">👥 Team &amp; Budget</a>
-      <a class="dd-link" href="./stats.html">📈 Stats</a>
-    </nav>
     <div class="m-stats">${stats}</div>
     ${alerts.join('')}
     ${cvrBars}${geoBars}${ledger}${units}${leak}${email}${pixels}${levers}

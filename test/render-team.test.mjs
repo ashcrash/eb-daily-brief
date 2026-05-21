@@ -34,3 +34,8 @@ test('renders the risk register', () => {
 test('safe on empty inputs', () => {
   assert.doesNotThrow(() => renderTeam({}, {}));
 });
+test('is sealed — no back button or cross-page nav', () => {
+  const html = renderTeam(latest, team);
+  assert.doesNotMatch(html, /m-back/);
+  assert.doesNotMatch(html, /class="drilldown"/);
+});

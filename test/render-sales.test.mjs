@@ -43,3 +43,8 @@ test('derives a demand-stall alert from the live conversion metric', () => {
 test('safe on empty inputs', () => {
   assert.doesNotThrow(() => renderSales({}, {}));
 });
+test('is sealed — no back button or cross-page nav', () => {
+  const html = renderSales(latest, sales);
+  assert.doesNotMatch(html, /m-back/);
+  assert.doesNotMatch(html, /class="drilldown"/);
+});
