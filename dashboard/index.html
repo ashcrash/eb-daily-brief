@@ -14,15 +14,6 @@
 <body>
   <main id="app"><p class="loading">Loading the brief&hellip;</p></main>
 
-  <!-- Hidden static form so Netlify detects + provisions the feedback form (the live form is rendered by app.js and submits here via fetch). -->
-  <form name="dashboard-feedback" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="dashboard-feedback">
-    <input type="text" name="bot-field">
-    <input type="text" name="edition">
-    <input type="text" name="page">
-    <textarea name="comments"></textarea>
-  </form>
-
   <script type="module" src="./app.js"></script>
 </body>
 </html>

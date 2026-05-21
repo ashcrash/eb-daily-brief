@@ -234,11 +234,6 @@ if (typeof document !== 'undefined') {
     // Reliable channel: copy for pasting into the Claude chat.
     let copied = false;
     try { await navigator.clipboard.writeText(text); copied = true; } catch { copied = false; }
-    // Bonus channel: also submit to the Netlify form (auto-capture when available).
-    try {
-      const body = new URLSearchParams({ 'form-name': 'dashboard-feedback', 'bot-field': '', edition: String(ed), page: 'master', comments: JSON.stringify(comments) });
-      fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() }).catch(() => {});
-    } catch { /* ignore */ }
     document.querySelectorAll('.cbox textarea').forEach(t => { t.value = ''; t.classList.remove('filled'); });
     refreshBar();
     const toast = $('.toast');
