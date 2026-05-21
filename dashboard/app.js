@@ -1,6 +1,5 @@
-export function esc(s) {
-  return String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-}
+import { esc, freshnessBadge, statusPanel, mountErrorCapture } from './shared-ui.js';
+export { esc };
 
 // RAG performance palette (green on-track / amber caution / red off-target)
 const RAG = { good: '#35c08a', watch: '#e6b23e', bad: '#f0625a', neutral: '#20bcf3' };
@@ -47,6 +46,7 @@ function topbar(b) {
       <select class="daypick" aria-label="Choose day"></select>
       <button class="reviewtoggle" type="button" aria-pressed="false">💬 Review</button>
       <span class="ed num">Ed. ${esc(b.edition)} · ${esc(b.date)}</span>
+      ${freshnessBadge(b.generatedAt)}
     </div></header>`;
 }
 
@@ -166,6 +166,7 @@ export function buildBriefHTML(b) {
     ${inboxSection(b.inbox || (b.lenses && b.lenses.inbox))}
     ${listSection('Today’s content angle', b.contentAngle, false)}
     ${listSection('Action stack', b.actionStack, true)}
+    ${statusPanel(b.sources, b.toolIssues, b.__build)}
     ${footer(b)}
   `;
 }
@@ -207,6 +208,7 @@ function renderCharts(brief) {
 if (typeof document !== 'undefined') {
   let current = null;
   const $ = s => document.querySelector(s);
+  mountErrorCapture();
 
   function ensureChrome() {
     if (!$('.submitbar')) {
@@ -273,8 +275,9 @@ if (typeof document !== 'undefined') {
     if (keepReview && document.body.classList.contains('review')) { $('.reviewtoggle')?.setAttribute('aria-pressed', 'true'); }
     refreshBar();
   }
-  fetch('./briefs/latest.json', { cache: 'no-store' })
-    .then(r => r.json())
-    .then(b => mount(b, false))
+  Promise.all([
+    fetch('./briefs/latest.json', { cache: 'no-store' }).then(r => r.json()),
+    fetch('/healthz', { cache: 'no-store' }).then(r => r.json()).catch(() => null)
+  ]).then(([b, health]) => { if (health && health.build) b.__build = health.build; mount(b, false); })
     .catch(() => { $('#app').innerHTML = '<p class="err">Failed to load the brief.</p>'; });
 }

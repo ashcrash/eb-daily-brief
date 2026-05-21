@@ -195,3 +195,14 @@ body.review .cbox{display:block}
 .drilldown .dd-link{font-size:13px;color:var(--text);text-decoration:none;background:var(--panel2);border:1px solid var(--line2);border-radius:9px;padding:7px 12px;transition:border-color .15s,color .15s}
 .drilldown .dd-link:hover{border-color:var(--eb-blue);color:var(--eb-blue)}
 @media (max-width:640px){.drilldown{gap:8px;padding:10px 12px}.drilldown .dd-link{flex:1;text-align:center}}
+
+/* ---- monitoring: freshness badge + system status ---- */
+.freshness{font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px;border:1px solid var(--line2)}
+.freshness.good{color:var(--good);background:rgba(53,192,138,.12);border-color:rgba(53,192,138,.3)}
+.freshness.warn{color:var(--amber);background:rgba(230,178,62,.12);border-color:rgba(230,178,62,.3)}
+.freshness.bad{color:var(--bad);background:rgba(240,98,90,.12);border-color:rgba(240,98,90,.3)}
+.statuspanel{border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel);padding:14px 16px;margin:0 0 16px}
+.statuspanel .sp-head{font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:10px}
+.statuspanel .sp-srcs{display:flex;flex-wrap:wrap;gap:0}
+.src.ok{color:var(--good)}
+.buildstamp{color:var(--faint);font-size:11px;margin-top:10px;font-variant-numeric:tabular-nums}
