@@ -236,6 +236,8 @@ if (typeof document !== 'undefined') {
     // Reliable channel: copy for pasting into the Claude chat.
     let copied = false;
     try { await navigator.clipboard.writeText(text); copied = true; } catch { copied = false; }
+    // Persist server-side too (KV via the worker), best-effort. Clipboard stays primary.
+    try { navigator.sendBeacon('/__feedback', JSON.stringify({ edition: ed, date, page: 'master', comments })); } catch { /* ignore */ }
     document.querySelectorAll('.cbox textarea').forEach(t => { t.value = ''; t.classList.remove('filled'); });
     refreshBar();
     const toast = $('.toast');
