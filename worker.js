@@ -2,7 +2,12 @@
 // With assets.run_worker_first=true, this runs on EVERY request, so
 // briefs/latest.json (the sensitive data) is gated too — not just index.html.
 // Password comes from the DASH_PASSWORD env var (Workers project → Settings →
-// Variables and Secrets). Username is ignored; only the password is checked.
+// Variables and Secrets). It MUST be stored as an encrypted "Secret", NOT a
+// "Text" var: Workers Builds runs `wrangler deploy` on every git push, which
+// preserves Secrets but DROPS dashboard plaintext vars that aren't declared in
+// wrangler.jsonc — a plaintext DASH_PASSWORD gets wiped on the next daily
+// publish and fail-closes the dashboard to 503. Username is ignored; only the
+// password is checked.
 export default {
   async fetch(request, env) {
     const expected = env.DASH_PASSWORD;
