@@ -8,7 +8,7 @@
 // plaintext vars not declared in wrangler.jsonc (would 503 the next deploy).
 import { basicAuthOk } from './shared/auth.mjs';
 import { securityHeaders } from './shared/security.mjs';
-import { buildHealthBody, isTopLevelPath, viewKey } from './shared/monitor.mjs';
+import { buildHealthBody, isTopLevelPath, viewKey, errorKey, feedbackKey } from './shared/monitor.mjs';
 
 function json(obj, status = 200, extra = {}) {
   return new Response(JSON.stringify(obj), {
@@ -36,6 +36,34 @@ async function serveAsset(request, env) {
   const sec = securityHeaders();
   for (const k in sec) h.set(k, sec[k]);
   return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
+}
+
+// Best-effort KV ingest for client errors + feedback, with a per-day flood cap.
+async function ingest(request, env, keyFn) {
+  if (!env.KV) return new Response(null, { status: 204, headers: securityHeaders() });
+  let payload = {};
+  try { payload = await request.json(); } catch { payload = {}; }
+  const day = new Date().toISOString().slice(0, 10);
+  const capKey = `cap:${keyFn === errorKey ? 'error' : 'feedback'}:${day}`;
+  const n = parseInt((await env.KV.get(capKey)) || '0', 10);
+  if (n < 500) {
+    await env.KV.put(keyFn(), JSON.stringify({ ...payload, ts: new Date().toISOString() }), { expirationTtl: 60 * 60 * 24 * 30 });
+    await env.KV.put(capKey, String(n + 1), { expirationTtl: 60 * 60 * 24 * 2 });
+  }
+  return new Response(null, { status: 204, headers: securityHeaders() });
+}
+
+// Aggregated observability for the gated /stats view.
+async function statsJson(env) {
+  if (!env.KV) return json({ views: {}, errors: [], feedback: [], note: 'KV not bound' });
+  const out = { views: {}, errors: [], feedback: [] };
+  const v = await env.KV.list({ prefix: 'views:' });
+  for (const k of v.keys) out.views[k.name] = parseInt((await env.KV.get(k.name)) || '0', 10);
+  const e = await env.KV.list({ prefix: 'error:', limit: 50 });
+  for (const k of e.keys) { try { out.errors.push(JSON.parse(await env.KV.get(k.name))); } catch {} }
+  const f = await env.KV.list({ prefix: 'feedback:', limit: 50 });
+  for (const k of f.keys) { try { out.feedback.push(JSON.parse(await env.KV.get(k.name))); } catch {} }
+  return json(out);
 }
 
 export default {
@@ -67,7 +95,12 @@ export default {
       });
     }
 
-    // 3) Authed observability routes are added in a later task. For now, serve assets.
+    // 3) Authed observability routes (KV-backed; inert until KV is bound).
+    if (request.method === 'POST' && path === '/__client-error') return ingest(request, env, errorKey);
+    if (request.method === 'POST' && path === '/__feedback') return ingest(request, env, feedbackKey);
+    if (request.method === 'GET' && path === '/__stats.json') return statsJson(env);
+
+    // 4) Authed asset serving + view counting.
     if (isTopLevelPath(path) && env.KV) {
       ctx.waitUntil((async () => {
         const date = new Date().toISOString().slice(0, 10);
