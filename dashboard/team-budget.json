@@ -1,0 +1,42 @@
+{
+  "updated": "2026-05-21",
+  "note": "Stakeholder + budget evergreen data. Revenue, COG and margin are pulled live from briefs/latest.json.",
+  "target": "£200K",
+  "adSpend": "$0",
+  "patent": { "status": "Filed", "date": "Jan 2, 2025" },
+  "people": [
+    { "emoji": "🧑‍🔧", "name": "Ash", "role": "Founder & CEO — Easi Breezi", "dot": "green", "status": "Active — sole builder, all decisions",
+      "details": [["Focus now", "Convert funnel + late-June ship", "ok"], ["Location", "Remote — Bali", ""], ["Patent filed", "Jan 2, 2025 ✓", "ok"], ["Ship date", "Late June 2026", "accent"]] },
+    { "emoji": "🎨", "name": "Kevin J", "role": "VA — Canva + LinkedIn/X posting", "dot": "green", "status": "Active — check Slack DM for brief status",
+      "details": [["Role", "Canva design + social posting", "ok"], ["Contact", "kvnjorghie@gmail.com", ""], ["Channel", "Slack · TZ Bangkok", ""], ["Took over", "LinkedIn/X from Vaib (13 May)", ""]] },
+    { "emoji": "📦", "name": "NextSmartShip (NSS)", "role": "3PL / Fulfillment — Shenzhen", "dot": "red", "status": "Wire the fulfillment integration before ship",
+      "details": [["Contact", "David Lai", "ok"], ["Status", "Locked (14 May)", "ok"], ["Shopify ↔ NSS", "NOT connected (P0)", "urgent"], ["Chain", "SDF + Minewing → NSS → customer", ""]] },
+    { "emoji": "🏭", "name": "Minewing + SDF + Hongxin", "role": "Assembly · Filters · Wires", "dot": "yellow", "status": "On track — wires are the critical path",
+      "details": [["Minewing", "Assembly — confirmed", "ok"], ["SDF (filters)", "H11 HEPA · $0.01 EXW", "ok"], ["Wires (Hongxin)", "ETA 31 May — binding", "warn"], ["Carbon filter", "In testing — post-MVP", "warn"]] },
+    { "emoji": "🤝", "name": "Retail Partnerships", "role": "Distribution / Wholesale", "needsInfo": true, "dot": "red", "status": "Owner gap — decide who drives retail",
+      "details": [["Previous owner", "Vaib — departed 4 May", "urgent"], ["Status", "Orphaned — no owner", "urgent"], ["Assets", "Retailer + rental decks live", ""], ["Action", "Re-assign or pause", "missing"]] },
+    { "emoji": "🎯", "name": "Kickstarter Backers", "role": "Campaign did NOT fund (Jan 2026)", "dot": "muted", "status": "Treat as $0 · not a live audience",
+      "details": [["Outcome", "Did not fund — refunded", "urgent"], ["Backers", "20 · $0 realized", ""], ["Email list", "12,926 — cold / dead", ""], ["In Brevo", "Imported but excluded", ""]] }
+  ],
+  "adChannels": [
+    { "platform": "📘 Meta (FB / IG)", "pct": 0, "color": "var(--eb-blue)", "rows": [["Status", "Not live", ""], ["Pixel + CAPI", "Connected ✓", "ok"], ["Spend", "$0", ""], ["When", "After demand proof", "accent"]] },
+    { "platform": "🎵 TikTok Ads", "pct": 0, "color": "var(--amber)", "rows": [["Status", "Pending approval", "warn"], ["Pixel", "Contract pending", "warn"], ["Spend", "$0", ""], ["Blocker", "Account contract", "urgent"]] },
+    { "platform": "▶️ YouTube Ads", "pct": 0, "color": "var(--eb-blue)", "rows": [["Status", "Not planned yet", ""], ["GA4", "Connected ✓", "ok"], ["Spend", "$0", ""], ["Asset", "169K views · 106K smog hook", "ok"]] },
+    { "platform": "📧 Email (Brevo)", "pct": 80, "color": "#7c8cff", "rows": [["Status", "Sending", "ok"], ["Campaigns", "5 (last #5, 12 May)", ""], ["Cost", "~$0 (free tier)", ""]] }
+  ],
+  "milestones": [
+    { "label": "First revenue", "progress": "earned ✓", "state": "done", "badge": ["green", "Achieved"], "live": "revenue" },
+    { "label": "100 pre-orders", "progress": "12 / 100 (12%) · ~14 EB units", "state": "active", "badge": ["yellow", "In progress"] },
+    { "label": "£10K pre-order revenue", "progress": "target by late June 2026", "state": "active", "badge": ["yellow", "In progress"], "live": "revenue" },
+    { "label": "£50K revenue", "progress": "≈ 370 units @ RRP", "state": "pending", "badge": ["muted", "Pending"] },
+    { "label": "£200K revenue", "progress": "≈ 1,500 units @ RRP — full-year target", "state": "pending", "badge": ["muted", "Pending"] }
+  ],
+  "risks": [
+    { "title": "Demand stall", "desc": "0 orders in 11 days. Funnel mechanics fixed — the gap is qualified demand reaching the page.", "sev": ["bad", "High"] },
+    { "title": "Shopify ↔ NSS not connected", "desc": "Fulfillment integration with NextSmartShip isn't wired. P0 before the late-June ship.", "sev": ["bad", "High"] },
+    { "title": "Wires ETA = ship constraint", "desc": "Wire harness (Hongxin) ETA 31 May is the binding critical-path item for the late-June ship.", "sev": ["bad", "High"] },
+    { "title": "Retail partnerships orphaned", "desc": "No owner since Vaib departed 4 May. Re-assign or formally pause.", "sev": ["warn", "Medium"] },
+    { "title": "EB25 offer decision", "desc": "The 25% pre-order code expires Friday with 0 uses. Decide: extend, relaunch, or lapse.", "sev": ["warn", "Medium"] },
+    { "title": "Filter maintenance adoption", "desc": "Recurring revenue depends on users replacing filters — make the swap UX obvious.", "sev": ["warn", "Medium"] }
+  ]
+}
