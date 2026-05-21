@@ -188,3 +188,10 @@ body.review .cbox{display:block}
 .kpi.bad::before{animation:pulse 2.2s ease-in-out 4 both}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---- drill-down nav (links to the same-site detailed dashboards) ---- */
+.drilldown{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 22px;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md)}
+.drilldown .dd-label{font-family:var(--display);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.drilldown .dd-link{font-size:13px;color:var(--text);text-decoration:none;background:var(--panel2);border:1px solid var(--line2);border-radius:9px;padding:7px 12px;transition:border-color .15s,color .15s}
+.drilldown .dd-link:hover{border-color:var(--eb-blue);color:var(--eb-blue)}
+@media (max-width:640px){.drilldown{gap:8px;padding:10px 12px}.drilldown .dd-link{flex:1;text-align:center}}

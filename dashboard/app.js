@@ -137,10 +137,22 @@ function footer(b) {
   return `<footer>Sources ${chips}<br>Edition ${esc(b.edition)} · generated ${esc(b.generatedAt || '')}</footer>`;
 }
 
+// Persistent drill-down nav — same-site detailed dashboards (one login). Fixed links,
+// independent of latest.json, so it survives the daily regeneration.
+function detailLinks() {
+  const links = [
+    { href: './sales-funnel.html', label: 'Sales & Shopify', icon: '🛒' },
+    { href: './marketing-hub.html', label: 'Marketing Hub', icon: '🎯' },
+    { href: './team-budget.html', label: 'Team & Budget', icon: '👥' }
+  ];
+  return `<nav class="drilldown"><span class="dd-label">Drill into detail</span>${links.map(l => `<a class="dd-link" href="${l.href}">${l.icon} ${esc(l.label)}</a>`).join('')}</nav>`;
+}
+
 export function buildBriefHTML(b) {
   const channels = (b.channels || []).map(ch => channelSection(ch, b.charts)).join('');
   return `
     ${topbar(b)}
+    ${detailLinks()}
     ${execSummary(b.executiveSummary || b.headline)}
     ${northStar(b.northStar)}
     ${decisionsSection(b.needsDecision)}

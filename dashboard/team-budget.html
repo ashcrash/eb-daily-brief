@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easi Breezi — Team & Budget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e15; --surface: #111827; --border: #1f2a3d;
+    --text: #eaf0f7; --muted: #93a3b8; --accent: #20BCF3;
+    --accent-muted: rgba(32,188,243,0.14);
+    --green: #35c08a; --yellow: #e6b23e; --red: #f0625a;
+    --blue: #20BCF3; --purple: #7c8cff;
+    --green-muted: rgba(53,192,138,0.14);
+    --yellow-muted: rgba(230,178,62,0.14);
+    --red-muted: rgba(240,98,90,0.14);
+    --blue-muted: rgba(32,188,243,0.14);
+  }
+  body { background: radial-gradient(900px 480px at 78% -8%, rgba(32,188,243,.10), transparent 60%), var(--bg); color: var(--text); font-family: 'Chakra Petch', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.55; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 12px; }
+  .header-left h1 { font-family: 'Orbitron', sans-serif; font-size: 23px; font-weight: 700; letter-spacing: -0.2px; }
+  .header-left h1 span { background: linear-gradient(135deg,#20BCF3,#FA800E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .header-left p { color: var(--muted); margin-top: 4px; font-size: 13px; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .badge-green { background: var(--green-muted); color: var(--green); }
+  .badge-yellow { background: var(--yellow-muted); color: var(--yellow); }
+  .badge-red { background: var(--red-muted); color: var(--red); }
+  .badge-blue { background: var(--blue-muted); color: var(--blue); }
+  .badge-accent { background: var(--accent-muted); color: var(--accent); }
+  .badge-muted { background: rgba(100,100,100,0.2); color: var(--muted); }
+  .last-updated { font-size: 11px; color: var(--muted); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .stat-card .value { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* People cards */
+  .people-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .person-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .person-card.needs-info { border-color: rgba(251,191,36,0.4); }
+  .person-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .person-avatar { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .person-name { font-size: 15px; font-weight: 600; }
+  .person-role { font-size: 12px; color: var(--muted); }
+  .person-details { display: flex; flex-direction: column; gap: 6px; }
+  .detail-row { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px solid rgba(42,42,45,0.6); }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key { color: var(--muted); }
+  .detail-val { font-weight: 500; text-align: right; }
+  .detail-val.missing { color: var(--yellow); font-style: italic; }
+  .detail-val.ok { color: var(--green); }
+  .detail-val.urgent { color: var(--red); }
+
+  /* Status dot */
+  .status-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); box-shadow: 0 0 6px rgba(52,211,153,0.5); }
+  .dot-yellow { background: var(--yellow); }
+  .dot-red { background: var(--red); }
+  .dot-muted { background: #444; }
+  .status-text { font-size: 12px; color: var(--muted); }
+
+  /* Budget table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  td { padding: 11px 14px; font-size: 13px; border-bottom: 1px solid rgba(42,42,45,0.5); }
+  tr:last-child td { border-bottom: none; }
+  .total-row td { font-weight: 700; color: var(--accent); border-top: 1px solid var(--border); }
+
+  /* Ad spend tracker */
+  .ad-channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .ad-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+  .ad-platform { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .ad-stat { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+  .ad-stat .k { color: var(--muted); }
+  .ad-stat .v { font-weight: 500; }
+  .progress-bg { background: var(--border); border-radius: 4px; height: 5px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: var(--accent); }
+
+  /* Revenue milestones */
+  .milestones { display: flex; flex-direction: column; gap: 10px; }
+  .milestone-row { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+  .ms-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+  .ms-check.done { background: var(--green-muted); color: var(--green); }
+  .ms-check.active { background: var(--accent-muted); color: var(--accent); }
+  .ms-check.pending { background: rgba(100,100,100,0.15); color: #444; }
+  .ms-label { flex: 1; font-size: 13px; font-weight: 500; }
+  .ms-amount { font-size: 14px; font-weight: 700; }
+  .ms-progress { font-size: 12px; color: var(--muted); }
+
+  /* Risk table */
+  .risks { display: flex; flex-direction: column; gap: 8px; }
+  .risk-row { display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: start; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+  .risk-num { font-size: 12px; font-weight: 700; color: var(--muted); margin-top: 2px; }
+  .risk-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .risk-desc { font-size: 12px; color: var(--muted); }
+
+  /* Alert */
+  .alert { border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
+  .alert-warn { background: var(--yellow-muted); border: 1px solid rgba(251,191,36,0.3); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; }
+  .alert-text strong { display: block; margin-bottom: 2px; }
+
+  /* Two col */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Snapshot banner -->
+  <div class="alert alert-warn" style="margin-bottom:24px;">
+    <div class="alert-icon">📸</div>
+    <div class="alert-text"><strong>Static snapshot — data as of 20 May 2026.</strong>Headline figures live-verified (Shopify) or from vault current-state. Being replaced by the live multi-audience cloud dashboard.</div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>👥 Easi Breezi — <span>Team & Budget</span></h1>
+      <p>Stakeholder Status · Ad Spend Tracker · Revenue Milestones · Risk Register</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span class="badge badge-green">Team: Ash + Kevin (VA)</span>
+      <span class="last-updated">Updated: 20 May 2026</span>
+    </div>
+  </div>
+
+  <!-- Top Stats -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="label">Revenue To Date</div>
+      <div class="value" style="color:var(--accent)">$2,009</div>
+      <div class="sub">12 paid pre-orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Revenue Target</div>
+      <div class="value" style="color:var(--muted)">£200K</div>
+      <div class="sub">≈ 1,500 units @ RRP</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Ad Spend</div>
+      <div class="value" style="color:var(--muted)">£0</div>
+      <div class="sub">Pre-launch — none yet</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Patent Status</div>
+      <div class="value" style="color:var(--green)">Filed</div>
+      <div class="sub">Jan 2, 2025</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">COG / Unit</div>
+      <div class="value" style="color:var(--green)">$15.91</div>
+      <div class="sub">Confirmed ✓</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Margin @ $170</div>
+      <div class="value" style="color:var(--green)">90.6%</div>
+      <div class="sub">86.6% @ $127.50 (EB25)</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Team / Stakeholders -->
+  <div class="section">
+    <div class="section-title">👥 Stakeholder & Supplier Status</div>
+    <div class="people-grid">
+
+      <div class="person-card">
+        <div class="person-header">
+          <div class="person-avatar" style="background:rgba(32,188,243,0.15);">🧑‍🔧</div>
+          <div>
+            <div class="person-name">Ash</div>
+            <div class="person-role">Founder & CEO — Easi Breezi</div>
+          </div>
+        </div>
+        <div class="person-details">
+          <div class="detail-row"><span class="detail-key">Focus now</span><span class="detail-val ok">Convert funnel + late-June ship</span></div>
+          <div class="detail-row"><span class="detail-key">Location</span><span class="detail-val">Remote — Bali</span></div>
+          <div class="detail-row"><span class="detail-key">Patent filed</span><span class="detail-val ok">Jan 2, 2025 ✓</span></div>
+          <div class="detail-row"><span class="detail-key">Ship date</span><span class="detail-val" style="color:var(--accent)">Late June 2026</span></div>
+        </div>
+        <div class="status-row"><div class="dot dot-green"></div><span class="status-text">Active — sole builder, all decisions</span></div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-header">
+          <div class="person-avatar" style="background:rgba(96,165,250,0.15);">🎨</div>
+          <div>
+            <div class="person-name">Kevin J</div>
+            <div class="person-role">VA — Canva + LinkedIn/X posting</div>
+          </div>
+        </div>
+        <div class="person-details">
+          <div class="detail-row"><span class="detail-key">Role</span><span class="detail-val ok">Canva design + social posting</span></div>
+          <div class="detail-row"><span class="detail-key">Contact</span><span class="detail-val">kvnjorghie@gmail.com</span></div>
+          <div class="detail-row"><span class="detail-key">Channel</span><span class="detail-val">Slack · TZ Bangkok</span></div>
+          <div class="detail-row"><span class="detail-key">Took over</span><span class="detail-val">LinkedIn/X from Vaib (13 May)</span></div>
+        </div>
+        <div class="status-row"><div class="dot dot-green"></div><span class="status-text">Active — check Slack DM for brief status</span></div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-header">
+          <div class="person-avatar" style="background:rgba(52,211,153,0.1);">📦</div>
+          <div>
+            <div class="person-name">NextSmartShip (NSS)</div>
+            <div class="person-role">3PL / Fulfillment — Shenzhen</div>
+          </div>
+        </div>
+        <div class="person-details">
+          <div class="detail-row"><span class="detail-key">Contact</span><span class="detail-val ok">David Lai</span></div>
+          <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val ok">Locked (14 May)</span></div>
+          <div class="detail-row"><span class="detail-key">Shopify ↔ NSS</span><span class="detail-val urgent">🚨 NOT connected (P0)</span></div>
+          <div class="detail-row"><span class="detail-key">Chain</span><span class="detail-val">SDF + Minewing → NSS → customer</span></div>
+        </div>
+        <div class="status-row"><div class="dot dot-red"></div><span class="status-text">Wire the fulfillment integration before ship</span></div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-header">
+          <div class="person-avatar" style="background:rgba(52,211,153,0.1);">🏭</div>
+          <div>
+            <div class="person-name">Minewing + SDF + Hongxin</div>
+            <div class="person-role">Assembly · Filters · Wires</div>
+          </div>
+        </div>
+        <div class="person-details">
+          <div class="detail-row"><span class="detail-key">Minewing</span><span class="detail-val ok">Assembly — confirmed</span></div>
+          <div class="detail-row"><span class="detail-key">SDF (filters)</span><span class="detail-val ok">H11 HEPA · $0.01 EXW</span></div>
+          <div class="detail-row"><span class="detail-key">Wires (Hongxin)</span><span class="detail-val" style="color:var(--yellow)">ETA 31 May — binding</span></div>
+          <div class="detail-row"><span class="detail-key">Carbon filter</span><span class="detail-val" style="color:var(--yellow)">In testing — post-MVP</span></div>
+        </div>
+        <div class="status-row"><div class="dot dot-yellow"></div><span class="status-text">On track — wires are the critical path</span></div>
+      </div>
+
+      <div class="person-card needs-info">
+        <div class="person-header">
+          <div class="person-avatar" style="background:rgba(248,113,113,0.12);">🤝</div>
+          <div>
+            <div class="person-name">Retail Partnerships</div>
+            <div class="person-role">Distribution / Wholesale</div>
+          </div>
+        </div>
+        <div class="person-details">
+          <div class="detail-row"><span class="detail-key">Previous owner</span><span class="detail-val urgent">Vaib — departed 4 May</span></div>
+          <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val urgent">🚨 Orphaned — no owner</span></div>
+          <div class="detail-row"><span class="detail-key">Assets</span><span class="detail-val">Retailer + rental decks live</span></div>
+          <div class="detail-row"><span class="detail-key">Action</span><span class="detail-val missing">Re-assign or pause</span></div>
+        </div>
+        <div class="status-row"><div class="dot dot-red"></div><span class="status-text">Owner gap — decide who drives retail</span></div>
+      </div>
+
+      <div class="person-card">
+        <div class="person-header">
+          <div class="person-avatar" style="background:rgba(100,100,100,0.15);">🎯</div>
+          <div>
+            <div class="person-name">Kickstarter Backers</div>
+            <div class="person-role">Campaign did NOT fund (Jan 2026)</div>
+          </div>
+        </div>
+        <div class="person-details">
+          <div class="detail-row"><span class="detail-key">Outcome</span><span class="detail-val urgent">Did not fund — backers refunded</span></div>
+          <div class="detail-row"><span class="detail-key">Backers</span><span class="detail-val">20 · $0 realized</span></div>
+          <div class="detail-row"><span class="detail-key">Email list</span><span class="detail-val">12,926 captured — cold/dead</span></div>
+          <div class="detail-row"><span class="detail-key">In Brevo</span><span class="detail-val">Imported (5 May) but excluded</span></div>
+        </div>
+        <div class="status-row"><div class="dot dot-muted"></div><span class="status-text">Treat as $0 · list is not a live audience</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Ad Spend Tracker -->
+  <div class="section">
+    <div class="section-title">💸 Ad Spend Tracker</div>
+    <div class="alert alert-warn" style="margin-bottom:16px;">
+      <div class="alert-icon">⏳</div>
+      <div class="alert-text"><strong>No Paid Ads Yet — Demand-First</strong>The blocker isn't budget — the funnel is now fixed but demand isn't reaching it (0 orders in 10 days). Drive qualified organic/owned traffic and prove the converted funnel before opening paid spend.</div>
+    </div>
+    <div class="ad-channels">
+      <div class="ad-card">
+        <div class="ad-platform">📘 Meta (Facebook/Instagram)</div>
+        <div class="ad-stat"><span class="k">Status</span><span class="v" style="color:var(--muted)">Not live</span></div>
+        <div class="ad-stat"><span class="k">Pixel + CAPI</span><span class="v" style="color:var(--green)">Connected ✓</span></div>
+        <div class="ad-stat"><span class="k">Spend to date</span><span class="v">£0</span></div>
+        <div class="ad-stat"><span class="k">When</span><span class="v" style="color:var(--accent)">After demand proof</span></div>
+        <div class="ad-stat"><span class="k">First creative</span><span class="v">Smog / viral Reels</span></div>
+        <div class="progress-bg"><div class="progress-fill" style="width:0%"></div></div>
+      </div>
+      <div class="ad-card">
+        <div class="ad-platform">🎵 TikTok Ads</div>
+        <div class="ad-stat"><span class="k">Status</span><span class="v" style="color:var(--yellow)">Pending approval</span></div>
+        <div class="ad-stat"><span class="k">Pixel</span><span class="v" style="color:var(--yellow)">Contract pending ⏸</span></div>
+        <div class="ad-stat"><span class="k">Spend to date</span><span class="v">£0</span></div>
+        <div class="ad-stat"><span class="k">Blocker</span><span class="v" style="color:var(--red)">Account contract</span></div>
+        <div class="ad-stat"><span class="k">Action</span><span class="v">2-min manual unblock</span></div>
+        <div class="progress-bg"><div class="progress-fill" style="width:0%;background:var(--yellow)"></div></div>
+      </div>
+      <div class="ad-card">
+        <div class="ad-platform">▶️ YouTube Ads</div>
+        <div class="ad-stat"><span class="k">Status</span><span class="v" style="color:var(--muted)">Not planned yet</span></div>
+        <div class="ad-stat"><span class="k">GA4</span><span class="v" style="color:var(--green)">Connected ✓</span></div>
+        <div class="ad-stat"><span class="k">Spend to date</span><span class="v">£0</span></div>
+        <div class="ad-stat"><span class="k">Asset</span><span class="v" style="color:var(--green)">169K views · 106K smog hook</span></div>
+        <div class="ad-stat"><span class="k">Note</span><span class="v">Proven hook to reuse</span></div>
+        <div class="progress-bg"><div class="progress-fill" style="width:0%;background:var(--blue)"></div></div>
+      </div>
+      <div class="ad-card">
+        <div class="ad-platform">📧 Email (Brevo)</div>
+        <div class="ad-stat"><span class="k">Status</span><span class="v" style="color:var(--green)">Sending</span></div>
+        <div class="ad-stat"><span class="k">Campaigns sent</span><span class="v">5 (last #5, 12 May)</span></div>
+        <div class="ad-stat"><span class="k">Active contacts</span><span class="v">327 (13.3K total)</span></div>
+        <div class="ad-stat"><span class="k">May quota left</span><span class="v" style="color:var(--yellow)">96 of 500</span></div>
+        <div class="ad-stat"><span class="k">Cost</span><span class="v">~£0 (free tier)</span></div>
+        <div class="progress-bg"><div class="progress-fill" style="width:80%;background:var(--purple)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Revenue Milestones -->
+  <div class="section">
+    <div class="section-title">🏆 Revenue Milestones</div>
+    <div class="milestones">
+      <div class="milestone-row">
+        <div class="ms-check done">✓</div>
+        <div>
+          <div class="ms-label">First revenue</div>
+          <div class="ms-progress" style="color:var(--green)">$2,009 earned ✓</div>
+        </div>
+        <div><span class="badge badge-green">Achieved</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="ms-check active">●</div>
+        <div>
+          <div class="ms-label">100 pre-orders</div>
+          <div class="ms-progress">12 / 100 (12%) · ~14 EB units</div>
+        </div>
+        <div><span class="badge badge-yellow">In Progress</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="ms-check active">●</div>
+        <div>
+          <div class="ms-label">£10K pre-order revenue</div>
+          <div class="ms-progress">~$2,009 (~£1,600) so far · target by late June 2026</div>
+        </div>
+        <div><span class="badge badge-yellow">In Progress</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="ms-check pending">○</div>
+        <div>
+          <div class="ms-label">£50K revenue</div>
+          <div class="ms-progress">≈ 370 units @ RRP</div>
+        </div>
+        <div><span class="badge badge-muted">Pending</span></div>
+      </div>
+      <div class="milestone-row">
+        <div class="ms-check pending">○</div>
+        <div>
+          <div class="ms-label">£200K revenue</div>
+          <div class="ms-progress">≈ 1,500 units @ RRP — full-year target</div>
+        </div>
+        <div><span class="badge badge-muted">Pending</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Risk Register -->
+  <div class="section">
+    <div class="section-title">⚠️ Top Risks Right Now</div>
+    <div class="risks">
+      <div class="risk-row">
+        <div class="risk-num">1</div>
+        <div>
+          <div class="risk-title">Demand Stall</div>
+          <div class="risk-desc">0 orders in 10 days (last #1017, 10 May). The funnel mechanics are fixed — the gap is qualified demand reaching the page. Drive owned/organic traffic now.</div>
+        </div>
+        <span class="badge badge-red">High</span>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">2</div>
+        <div>
+          <div class="risk-title">Shopify ↔ NSS Not Connected</div>
+          <div class="risk-desc">Fulfillment integration with NextSmartShip isn't wired. P0 before the late-June ship — orders can't auto-route to the 3PL until it's done.</div>
+        </div>
+        <span class="badge badge-red">High</span>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">3</div>
+        <div>
+          <div class="risk-title">Wires ETA = Ship Constraint</div>
+          <div class="risk-desc">Wire harness (Hongxin) ETA 31 May is the binding critical-path item for the late-June ship. A slip here slips the ship date.</div>
+        </div>
+        <span class="badge badge-red">High</span>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">4</div>
+        <div>
+          <div class="risk-title">Retail Partnerships Orphaned</div>
+          <div class="risk-desc">No owner since Vaib departed 4 May. Retailer + rental decks are live but no one is driving outreach. Re-assign or formally pause.</div>
+        </div>
+        <span class="badge badge-yellow">Medium</span>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">5</div>
+        <div>
+          <div class="risk-title">EB25 Offer Decision</div>
+          <div class="risk-desc">The 25% pre-order code expires Friday 22 May with 0 uses. Decide: extend, relaunch with a sharper hook, or let it lapse — and define the next offer.</div>
+        </div>
+        <span class="badge badge-yellow">Medium</span>
+      </div>
+      <div class="risk-row">
+        <div class="risk-num">6</div>
+        <div>
+          <div class="risk-title">Filter Maintenance Adoption</div>
+          <div class="risk-desc">Recurring revenue depends on users replacing filters. If the filter-swap UX is confusing, the consumable flywheel won't spin.</div>
+        </div>
+        <span class="badge badge-yellow">Medium</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

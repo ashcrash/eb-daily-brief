@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easi Breezi — Marketing Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0e15; --surface: #111827; --border: #1f2a3d;
+    --text: #eaf0f7; --muted: #93a3b8; --accent: #20BCF3;
+    --accent-muted: rgba(32,188,243,0.14);
+    --green: #35c08a; --yellow: #e6b23e; --red: #f0625a;
+    --blue: #20BCF3; --purple: #7c8cff; --pink: #FA800E;
+    --green-muted: rgba(53,192,138,0.14);
+    --yellow-muted: rgba(230,178,62,0.14);
+    --red-muted: rgba(240,98,90,0.14);
+    --blue-muted: rgba(32,188,243,0.14);
+    --purple-muted: rgba(124,140,255,0.14);
+  }
+  body { background: radial-gradient(900px 480px at 78% -8%, rgba(32,188,243,.10), transparent 60%), var(--bg); color: var(--text); font-family: 'Chakra Petch', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.55; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 12px; }
+  .header-left h1 { font-family: 'Orbitron', sans-serif; font-size: 23px; font-weight: 700; letter-spacing: -0.2px; }
+  .header-left h1 span { background: linear-gradient(135deg,#20BCF3,#FA800E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .header-left p { color: var(--muted); margin-top: 4px; font-size: 13px; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .badge-green { background: var(--green-muted); color: var(--green); }
+  .badge-yellow { background: var(--yellow-muted); color: var(--yellow); }
+  .badge-red { background: var(--red-muted); color: var(--red); }
+  .badge-blue { background: var(--blue-muted); color: var(--blue); }
+  .badge-purple { background: var(--purple-muted); color: var(--purple); }
+  .badge-accent { background: var(--accent-muted); color: var(--accent); }
+  .badge-muted { background: rgba(100,100,100,0.2); color: var(--muted); }
+  .last-updated { font-size: 11px; color: var(--muted); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+  .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .stat-card .value { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* Pillar Grid */
+  .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .pillar-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .pillar-emoji { font-size: 28px; margin-bottom: 8px; }
+  .pillar-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .pillar-pct { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .pillar-desc { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Content Calendar */
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .day-col { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 10px; }
+  .day-name { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; text-align: center; }
+  .day-platform { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+  .day-type { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* Content Ideas List */
+  .ideas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .idea-list { display: flex; flex-direction: column; gap: 8px; }
+  .idea-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: flex-start; gap: 10px; }
+  .idea-item.high { border-left: 3px solid var(--accent); }
+  .idea-item.medium { border-left: 3px solid var(--blue); }
+  .idea-item.low { border-left: 3px solid var(--border); }
+  .idea-icon { font-size: 16px; flex-shrink: 0; }
+  .idea-text { font-size: 13px; font-weight: 500; }
+  .idea-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Content Rules */
+  .rules-list { display: flex; flex-direction: column; gap: 8px; }
+  .rule-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 13px; }
+  .rule-num { width: 22px; height: 22px; border-radius: 50%; background: var(--accent-muted); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+  /* Influencer table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid rgba(42,42,45,0.6); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .tier-label { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; }
+  .tier-1 { background: rgba(32,188,243,0.18); color: var(--accent); }
+  .tier-2 { background: var(--blue-muted); color: var(--blue); }
+  .tier-3 { background: var(--purple-muted); color: var(--purple); }
+  .status-none { color: var(--muted); font-size: 12px; }
+
+  /* ManyChat section */
+  .manychat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .mc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+  .mc-card .mc-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; }
+  .mc-card .mc-value { font-size: 22px; font-weight: 700; }
+  .mc-card .mc-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* Automation status */
+  .auto-list { display: flex; flex-direction: column; gap: 8px; }
+  .auto-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+  .auto-name { font-size: 13px; font-weight: 500; }
+  .auto-desc { font-size: 12px; color: var(--muted); }
+  .auto-right { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); box-shadow: 0 0 6px rgba(52,211,153,0.5); }
+  .dot-yellow { background: var(--yellow); }
+  .dot-muted { background: #444; }
+
+  /* Alert */
+  .alert { border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
+  .alert-warn { background: var(--yellow-muted); border: 1px solid rgba(251,191,36,0.3); }
+  .alert-red { background: var(--red-muted); border: 1px solid rgba(248,113,113,0.3); }
+  .alert-green { background: var(--green-muted); border: 1px solid rgba(52,211,153,0.3); }
+  .alert-blue { background: var(--blue-muted); border: 1px solid rgba(96,165,250,0.2); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .alert-text strong { display: block; margin-bottom: 2px; }
+
+  /* Two/Three col */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  /* Progress bar */
+  .progress-bg { background: var(--border); border-radius: 4px; height: 6px; overflow: hidden; margin-top: 6px; }
+  .progress-fill { height: 100%; border-radius: 4px; }
+
+  @media (max-width: 800px) {
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+    .ideas-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .three-col { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 500px) {
+    .week-grid { grid-template-columns: repeat(2, 1fr); }
+    .three-col { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Snapshot banner -->
+  <div class="alert alert-blue" style="margin-bottom:24px;">
+    <div class="alert-icon">📸</div>
+    <div class="alert-text"><strong>Static snapshot — data as of 20 May 2026.</strong>Audience numbers from vault current-state. The content strategy + influencer tracker are evergreen plans. Being replaced by the live cloud dashboard.</div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>🎯 Easi Breezi — <span>Marketing Hub</span></h1>
+      <p>Content Calendar · Influencer Outreach · ManyChat & Email Automations</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span class="badge badge-accent">Pre-Launch Active</span>
+      <span class="last-updated">Updated: 20 May 2026</span>
+    </div>
+  </div>
+
+  <!-- Top Stats -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="label">Instagram</div>
+      <div class="value" style="color:var(--pink)">2,126</div>
+      <div class="sub">followers</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Top Reel</div>
+      <div class="value" style="color:var(--green)">771K</div>
+      <div class="sub">3 Reels · 1.6M reach</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">YouTube</div>
+      <div class="value" style="color:var(--red)">169K</div>
+      <div class="sub">views · 36 subs</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">ManyChat</div>
+      <div class="value" style="color:var(--green)">562</div>
+      <div class="sub">contacts · AIR keyword live</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Brevo Email</div>
+      <div class="value" style="color:var(--green)">327</div>
+      <div class="sub">active · 13.3K total</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Pre-Order Code</div>
+      <div class="value" style="color:var(--accent);font-size:20px;">EB25</div>
+      <div class="sub">25% off · ends Fri 22 May</div>
+    </div>
+  </div>
+
+  <!-- ALERT -->
+  <div class="alert alert-green" style="margin-bottom:24px;">
+    <div class="alert-icon">✅</div>
+    <div class="alert-text"><strong>Proven Hooks Are Working — Sustain the Cadence</strong>3 viral Reels in 6 weeks drove 1.6M reach + 263 follows (top: "Rather the bug than my face" 771K). The smog hook (106K YouTube) is validated. The gap now is consistent cadence and converting that reach into orders (0 in 10 days).</div>
+  </div>
+
+  <hr>
+
+  <!-- Content Pillars -->
+  <div class="section">
+    <div class="section-title">Content Pillars — What to Post</div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-emoji">😤</div>
+        <div class="pillar-name">Problem</div>
+        <div class="pillar-pct">30%</div>
+        <div class="pillar-desc">Pollution footage, heat complaints, "day in the life"</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-emoji">🌬️</div>
+        <div class="pillar-name">Product</div>
+        <div class="pillar-pct">25%</div>
+        <div class="pillar-desc">EB unit demo, unboxing, how it works</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-emoji">🤩</div>
+        <div class="pillar-name">Social Proof</div>
+        <div class="pillar-pct">20%</div>
+        <div class="pillar-desc">Testimonials, real riders, "OHHH DAMN" reactions</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-emoji">🎤</div>
+        <div class="pillar-name">Founder</div>
+        <div class="pillar-pct">15%</div>
+        <div class="pillar-desc">Behind the scenes, engineering story, Bali life</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-emoji">💡</div>
+        <div class="pillar-name">Education</div>
+        <div class="pillar-pct">10%</div>
+        <div class="pillar-desc">What is PM2.5, how HEPA works, airflow explained</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Weekly Cadence -->
+  <div class="section">
+    <div class="section-title">Weekly Posting Cadence — Target</div>
+    <div class="week-grid">
+      <div class="day-col">
+        <div class="day-name">Mon</div>
+        <div class="day-platform" style="color:var(--blue)">🎵 TikTok</div>
+        <div class="day-type">Problem / education hook</div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Tue</div>
+        <div class="day-platform" style="color:var(--pink)">📸 Instagram</div>
+        <div class="day-type">Product photo or reel</div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Wed</div>
+        <div class="day-platform" style="color:var(--red)">▶️ YouTube</div>
+        <div class="day-type">Longer explainer or test</div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Thu</div>
+        <div class="day-platform" style="color:var(--blue)">🎵 TikTok</div>
+        <div class="day-type">Founder / behind the scenes</div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Fri</div>
+        <div class="day-platform" style="color:var(--pink)">📸 Instagram</div>
+        <div class="day-type">Social proof / repost</div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sat</div>
+        <div class="day-platform" style="color:var(--accent)">🌐 All</div>
+        <div class="day-type">Engagement / community</div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sun</div>
+        <div class="day-platform" style="color:var(--accent)">🌐 All</div>
+        <div class="day-type">Engagement / community</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:10px;">Every post ends with: <strong style="color:var(--accent)">"Comment AIR for a discount sent to your DMs"</strong> — ManyChat picks it up automatically.</p>
+  </div>
+
+  <hr>
+
+  <!-- Content Ideas -->
+  <div class="section">
+    <div class="section-title">Upcoming Content Ideas</div>
+    <div class="ideas-grid">
+      <div>
+        <p style="font-size:12px;color:var(--accent);font-weight:600;margin-bottom:8px;">🔥 HIGH PRIORITY — Film First</p>
+        <div class="idea-list">
+          <div class="idea-item high">
+            <div class="idea-icon">🎬</div>
+            <div>
+              <div class="idea-text">"What you actually breathe in 20 min of traffic"</div>
+              <div class="idea-note">Real PM2.5 sensor test — proven hook, replicate smog video energy</div>
+            </div>
+          </div>
+          <div class="idea-item high">
+            <div class="idea-icon">🎬</div>
+            <div>
+              <div class="idea-text">Re-cut YouTube smog video for TikTok/Reels</div>
+              <div class="idea-note">Vertical crop, text overlays, 15–30 sec — do this weekend</div>
+            </div>
+          </div>
+          <div class="idea-item high">
+            <div class="idea-icon">🎬</div>
+            <div>
+              <div class="idea-text">"Why I built this" — Ash founder story video</div>
+              <div class="idea-note">Engineering background, Bali, pollution problem</div>
+            </div>
+          </div>
+          <div class="idea-item high">
+            <div class="idea-icon">🎬</div>
+            <div>
+              <div class="idea-text">EB unit unboxing + setup tutorial</div>
+              <div class="idea-note">Mount → filter → ride in 3 steps</div>
+            </div>
+          </div>
+          <div class="idea-item high">
+            <div class="idea-icon">⚔️</div>
+            <div>
+              <div class="idea-text">Zyon comparison Reel — "€935 vs EB"</div>
+              <div class="idea-note">Same mission. Works with your existing helmet. Fraction of the cost.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:8px;">🔵 MEDIUM PRIORITY</p>
+        <div class="idea-list">
+          <div class="idea-item medium">
+            <div class="idea-icon">🫁</div>
+            <div>
+              <div class="idea-text">"The filter that saves your lungs" — HEPA explainer</div>
+              <div class="idea-note">Addresses #1 objection: "aren't you just blowing dirty air in?"</div>
+            </div>
+          </div>
+          <div class="idea-item medium">
+            <div class="idea-icon">📦</div>
+            <div>
+              <div class="idea-text">Delivery rider POV video</div>
+              <div class="idea-note">B2B angle — Swiggy/Zomato/Grab fleet opportunity</div>
+            </div>
+          </div>
+          <div class="idea-item medium">
+            <div class="idea-icon">🤒</div>
+            <div>
+              <div class="idea-text">"3 reasons your helmet is making you sick"</div>
+              <div class="idea-note">Education pillar — fear hook</div>
+            </div>
+          </div>
+          <div class="idea-item medium">
+            <div class="idea-icon">🏙️</div>
+            <div>
+              <div class="idea-text">Time-lapse: Bali traffic pollution</div>
+              <div class="idea-note">Visual proof of the problem</div>
+            </div>
+          </div>
+          <div class="idea-item medium">
+            <div class="idea-icon">🚫</div>
+            <div>
+              <div class="idea-text">Delhi petrol bike ban angle (Aug 2026)</div>
+              <div class="idea-note">"Delhi's banning petrol bikes — but the air is still toxic"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Content Rules -->
+  <div class="section">
+    <div class="section-title">Content Rules — Non-Negotiable</div>
+    <div class="rules-list">
+      <div class="rule-row"><div class="rule-num">1</div> Hook in 1–2 seconds — no slow intros</div>
+      <div class="rule-row"><div class="rule-num">2</div> Subtitles on everything — most people watch muted</div>
+      <div class="rule-row"><div class="rule-num">3</div> Show the problem before the product</div>
+      <div class="rule-row"><div class="rule-num">4</div> Authentic > polished</div>
+      <div class="rule-row"><div class="rule-num">5</div> Always end with a CTA — comment AIR, pre-order, or follow</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Influencer Outreach -->
+  <div class="section">
+    <div class="section-title">🤝 Influencer Outreach Tracker</div>
+    <div class="alert alert-blue" style="margin-bottom:16px;">
+      <div class="alert-icon">💡</div>
+      <div class="alert-text"><strong>Untapped Channel</strong>No competitor in the helmet air/cooling category uses influencer marketing. This entire channel is Easi Breezi's to own. Approach: free unit, no strings attached. "If you like it, we'd love a review."</div>
+    </div>
+
+    <!-- Tier 1 -->
+    <p style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px;">TIER 1 — Global Gear Review (Send First)</p>
+    <div class="table-wrap" style="margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr><th>Creator</th><th>Platform</th><th>Audience</th><th>Why They Fit</th><th>Status</th><th>Contacted</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">FortNine (Ryan F9)</td>
+            <td>YouTube</td>
+            <td>2.3M subs</td>
+            <td>Most-trusted moto gear channel globally. Covers unusual innovative products.</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">RevZilla</td>
+            <td>YouTube + Web</td>
+            <td>Large US</td>
+            <td>Industry standard for helmet/gear decisions. Editorial pitch angle.</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">The Missenden Flyer</td>
+            <td>YouTube</td>
+            <td>200K+ UK</td>
+            <td>Helmet specialist. Highly engaged European audience.</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Yammie Noob</td>
+            <td>YouTube</td>
+            <td>Large US</td>
+            <td>Strong Gen Z following. Approachable format suits product demos.</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tier 2 -->
+    <p style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:8px;">TIER 2 — Asia / Urban Commuter Focus</p>
+    <div class="table-wrap" style="margin-bottom:20px;">
+      <table>
+        <thead>
+          <tr><th>Creator</th><th>Platform</th><th>Audience</th><th>Region</th><th>Status</th><th>Contacted</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">Rizki Motovlog</td>
+            <td>YouTube</td>
+            <td>982K subs</td>
+            <td>Indonesia / SE Asia</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Ride With Rahul</td>
+            <td>YouTube</td>
+            <td>Growing</td>
+            <td>India</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Royal Jordanian</td>
+            <td>YouTube</td>
+            <td>Urban commuter</td>
+            <td>London, UK</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Oggy F (Mumbai)</td>
+            <td>YouTube</td>
+            <td>India</td>
+            <td>India</td>
+            <td><span class="badge badge-muted">Not contacted</span></td>
+            <td class="status-none">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tier 3 -->
+    <div class="card">
+      <h3>TIER 3 — TikTok Mid-Tier (50K–500K followers)</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Search TikTok Creative Center for "motorcycle helmet" and "motorcycle gear". Target profile: urban commuter content, SE Asia / India / Middle East / urban Europe, no existing helmet brand deals.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span class="badge badge-accent">Urban commuter content</span>
+        <span class="badge badge-blue">SE Asia · India · Middle East</span>
+        <span class="badge badge-purple">50K–500K followers</span>
+        <span class="badge badge-muted">No helmet brand deals</span>
+        <span class="badge badge-green">Honest reaction format</span>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ManyChat -->
+  <div class="section">
+    <div class="section-title">🤖 ManyChat — Automation Status</div>
+    <div class="manychat-grid" style="margin-bottom:20px;">
+      <div class="mc-card">
+        <div class="mc-label">Total Contacts</div>
+        <div class="mc-value" style="color:var(--green)">562</div>
+        <div class="mc-sub">All time</div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-label">Active Keyword</div>
+        <div class="mc-value" style="color:var(--accent);font-size:18px;">AIR</div>
+        <div class="mc-sub">Comment → DM → EB25 code</div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-label">Discount Code</div>
+        <div class="mc-value" style="color:var(--yellow);font-size:18px;">EB25</div>
+        <div class="mc-sub">25% off · ends Fri 22 May</div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-label">Viral Reach (3 Reels)</div>
+        <div class="mc-value" style="color:var(--blue)">1.6M</div>
+        <div class="mc-sub">263 follows driven</div>
+      </div>
+    </div>
+
+    <div class="auto-list">
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Comment-to-DM (keyword: AIR)</div>
+          <div class="auto-desc">Any post comment with "AIR" → sends EB25 discount DM</div>
+        </div>
+        <div class="auto-right"><div class="dot dot-green"></div><span class="badge badge-green">Live</span></div>
+      </div>
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Any Post or Reel trigger</div>
+          <div class="auto-desc">Expand AIR keyword to work on ALL posts, not just one</div>
+        </div>
+        <div class="auto-right"><div class="dot dot-yellow"></div><span class="badge badge-yellow">Pending</span></div>
+      </div>
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Story Reply automation</div>
+          <div class="auto-desc">Anyone replying to a Story → receives EB25 discount DM</div>
+        </div>
+        <div class="auto-right"><div class="dot dot-yellow"></div><span class="badge badge-yellow">Pending</span></div>
+      </div>
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Welcome Message for new followers</div>
+          <div class="auto-desc">Auto-DM new followers with WELCOME10 code</div>
+        </div>
+        <div class="auto-right"><div class="dot dot-yellow"></div><span class="badge badge-yellow">Pending</span></div>
+      </div>
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">UTM tracking on all 7 automations</div>
+          <div class="auto-desc">easibreezi.com/ig, /tt, /air — all UTM-tagged</div>
+        </div>
+        <div class="auto-right"><div class="dot dot-green"></div><span class="badge badge-green">Live Mar 28</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Email Sequence Plan -->
+  <div class="section">
+    <div class="section-title">📧 Brevo Email — Sends & Next Iteration</div>
+    <div class="alert alert-green" style="margin-bottom:16px;">
+      <div class="alert-icon">✅</div>
+      <div class="alert-text"><strong>Sending — 5 Campaigns Out, Routing Fixed</strong>Last send #5 (12 May). The 0-click root cause was fixed 10 May (every Brevo URL now routes via /discount/EB25?redirect=…). Live audience = 327 active. The 12,926 Kickstarter contacts are cold/dead and excluded.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Sends #1–#5 <span style="color:var(--muted);font-size:12px;">(to 12 May)</span></div>
+          <div class="auto-desc">Iterative sends to the active list. First real click landed on Send #4 (9 May) after the routing fix.</div>
+        </div>
+        <div class="auto-right"><span class="badge badge-green">Done</span></div>
+      </div>
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Next send — EB25 last call <span style="color:var(--muted);font-size:12px;">(before Fri 22 May)</span></div>
+          <div class="auto-desc">Last-chance 25% framing + a real rider tip (not a sales line). Route to /discount/EB25?redirect=… per the locked rule.</div>
+        </div>
+        <div class="auto-right"><span class="badge badge-yellow">Queued</span></div>
+      </div>
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Quota watch</div>
+          <div class="auto-desc">96 of 500 May sends left — pace the active-list sends; don't burn quota on the dead KS list.</div>
+        </div>
+        <div class="auto-right"><span class="badge badge-yellow">96 left</span></div>
+      </div>
+      <div class="auto-row">
+        <div>
+          <div class="auto-name">Standing rule</div>
+          <div class="auto-desc">Every send must iterate on the prior (never "same template, next batch") and include a real factual rider tip near the bottom.</div>
+        </div>
+        <div class="auto-right"><span class="badge badge-blue">Always</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
