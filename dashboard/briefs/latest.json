@@ -457,6 +457,19 @@
   },
   "channels": [
     {
+      "id": "manychat",
+      "name": "ManyChat",
+      "sub": "Comment-to-DM (AIR)",
+      "headline": "562 contacts",
+      "metrics": [
+        { "name": "Total contacts", "value": "562", "delta": "+92 since Apr 21" },
+        { "name": "Keyword", "value": "AIR", "delta": "→ EB25 DM" }
+      ],
+      "notes": [
+        "Comment-to-DM funnel firing from viral Reels."
+      ]
+    },
+    {
       "id": "instagram",
       "name": "Instagram",
       "sub": "@easi.breezi",

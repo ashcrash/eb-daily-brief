@@ -1,0 +1,72 @@
+{
+  "updated": "2026-05-21",
+  "note": "Evergreen marketing strategy + influencer tracker. Live audience numbers are NOT stored here — they are pulled from briefs/latest.json by render-marketing.js so they never drift.",
+  "pillars": [
+    { "emoji": "😤", "name": "Problem", "pct": 30, "desc": "Pollution footage, heat complaints, \"day in the life\"" },
+    { "emoji": "🌬️", "name": "Product", "pct": 25, "desc": "EB unit demo, unboxing, how it works" },
+    { "emoji": "🤩", "name": "Social Proof", "pct": 20, "desc": "Testimonials, real riders, \"OHHH DAMN\" reactions" },
+    { "emoji": "🎤", "name": "Founder", "pct": 15, "desc": "Behind the scenes, engineering story, Bali life" },
+    { "emoji": "💡", "name": "Education", "pct": 10, "desc": "What is PM2.5, how HEPA works, airflow explained" }
+  ],
+  "cadence": [
+    { "day": "Mon", "platform": "🎵 TikTok", "type": "Problem / education hook" },
+    { "day": "Tue", "platform": "📸 Instagram", "type": "Product photo or reel" },
+    { "day": "Wed", "platform": "▶️ YouTube", "type": "Longer explainer or test" },
+    { "day": "Thu", "platform": "🎵 TikTok", "type": "Founder / behind the scenes" },
+    { "day": "Fri", "platform": "📸 Instagram", "type": "Social proof / repost" },
+    { "day": "Sat", "platform": "🌐 All", "type": "Engagement / community" },
+    { "day": "Sun", "platform": "🌐 All", "type": "Engagement / community" }
+  ],
+  "cadenceNote": "Every post ends with: \"Comment AIR for a discount sent to your DMs\" — ManyChat picks it up automatically.",
+  "ideas": {
+    "high": [
+      { "icon": "🎬", "text": "\"What you actually breathe in 20 min of traffic\"", "note": "Real PM2.5 sensor test — proven hook, replicate smog video energy" },
+      { "icon": "🎬", "text": "Re-cut YouTube smog video for TikTok/Reels", "note": "Vertical crop, text overlays, 15–30 sec" },
+      { "icon": "🎬", "text": "\"Why I built this\" — Ash founder story video", "note": "Engineering background, Bali, pollution problem" },
+      { "icon": "🎬", "text": "EB unit unboxing + setup tutorial", "note": "Mount → filter → ride in 3 steps" },
+      { "icon": "⚔️", "text": "Zyon comparison Reel — \"$935 vs EB\"", "note": "Same mission. Works with your existing helmet. Fraction of the cost." }
+    ],
+    "medium": [
+      { "icon": "🫁", "text": "\"The filter that saves your lungs\" — HEPA explainer", "note": "Addresses #1 objection: \"aren't you just blowing dirty air in?\"" },
+      { "icon": "📦", "text": "Delivery rider POV video", "note": "B2B angle — Swiggy/Zomato/Grab fleet opportunity" },
+      { "icon": "🤒", "text": "\"3 reasons your helmet is making you sick\"", "note": "Education pillar — fear hook" },
+      { "icon": "🏙️", "text": "Time-lapse: Bali traffic pollution", "note": "Visual proof of the problem" },
+      { "icon": "🚫", "text": "Delhi petrol bike ban angle (Aug 2026)", "note": "\"Delhi's banning petrol bikes — but the air is still toxic\"" }
+    ]
+  },
+  "rules": [
+    "Hook in 1–2 seconds — no slow intros",
+    "Subtitles on everything — most people watch muted",
+    "Show the problem before the product",
+    "Authentic > polished",
+    "Always end with a CTA — comment AIR, pre-order, or follow"
+  ],
+  "influencers": [
+    { "name": "FortNine (Ryan F9)", "platform": "YouTube", "audience": "2.3M subs", "region": "Global", "tier": 1, "fit": "Most-trusted moto gear channel globally. Covers unusual innovative products.", "status": "not-contacted", "contactedDate": null, "notes": "" },
+    { "name": "RevZilla", "platform": "YouTube + Web", "audience": "Large US", "region": "US", "tier": 1, "fit": "Industry standard for helmet/gear decisions. Editorial pitch angle.", "status": "not-contacted", "contactedDate": null, "notes": "" },
+    { "name": "The Missenden Flyer", "platform": "YouTube", "audience": "200K+ UK", "region": "UK / Europe", "tier": 1, "fit": "Helmet specialist. Highly engaged European audience.", "status": "not-contacted", "contactedDate": null, "notes": "" },
+    { "name": "Yammie Noob", "platform": "YouTube", "audience": "Large US", "region": "US", "tier": 1, "fit": "Strong Gen Z following. Approachable format suits product demos.", "status": "not-contacted", "contactedDate": null, "notes": "" },
+    { "name": "Rizki Motovlog", "platform": "YouTube", "audience": "982K subs", "region": "Indonesia / SE Asia", "tier": 2, "fit": "", "status": "not-contacted", "contactedDate": null, "notes": "" },
+    { "name": "Ride With Rahul", "platform": "YouTube", "audience": "Growing", "region": "India", "tier": 2, "fit": "", "status": "not-contacted", "contactedDate": null, "notes": "" },
+    { "name": "Royal Jordanian", "platform": "YouTube", "audience": "Urban commuter", "region": "London, UK", "tier": 2, "fit": "", "status": "not-contacted", "contactedDate": null, "notes": "" },
+    { "name": "Oggy F (Mumbai)", "platform": "YouTube", "audience": "India", "region": "India", "tier": 2, "fit": "", "status": "not-contacted", "contactedDate": null, "notes": "" }
+  ],
+  "tier3": {
+    "title": "TIER 3 — TikTok Mid-Tier (50K–500K followers)",
+    "desc": "Search TikTok Creative Center for \"motorcycle helmet\" and \"motorcycle gear\". Target profile: urban commuter content, SE Asia / India / Middle East / urban Europe, no existing helmet brand deals.",
+    "criteria": ["Urban commuter content", "SE Asia · India · Middle East", "50K–500K followers", "No helmet brand deals", "Honest reaction format"]
+  },
+  "influencerNote": "No competitor in the helmet air/cooling category uses influencer marketing — this channel is Easi Breezi's to own. Approach: free unit, no strings attached. \"If you like it, we'd love a review.\"",
+  "automations": [
+    { "name": "Comment-to-DM (keyword: AIR)", "desc": "Any post comment with \"AIR\" → sends EB25 discount DM", "status": "live" },
+    { "name": "Any Post or Reel trigger", "desc": "Expand AIR keyword to work on ALL posts, not just one", "status": "pending" },
+    { "name": "Story Reply automation", "desc": "Anyone replying to a Story → receives EB25 discount DM", "status": "pending" },
+    { "name": "Welcome Message for new followers", "desc": "Auto-DM new followers with a welcome code", "status": "pending" },
+    { "name": "UTM tracking on all automations", "desc": "easibreezi.com/ig, /tt, /air — all UTM-tagged", "status": "live" }
+  ],
+  "emailPlan": [
+    { "name": "Sends #1–#5", "desc": "Iterative sends to the active list. First real click landed on Send #4 (9 May) after the routing fix.", "status": "done" },
+    { "name": "Next send — EB25 last call", "desc": "Last-chance 25% framing + a real rider tip (not a sales line). Route via /discount/EB25?redirect=… per the locked rule.", "status": "queued" },
+    { "name": "Standing rule", "desc": "Every send must iterate on the prior (never \"same template, next batch\") and include a real factual rider tip near the bottom. Pace the active list; don't burn quota on the dead KS list.", "status": "always" }
+  ]
+}
