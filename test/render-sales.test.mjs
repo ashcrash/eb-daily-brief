@@ -31,8 +31,8 @@ test('renders live paid-order count from latest.store', () => {
 test('renders live revenue from latest.store', () => {
   assert.match(renderSales(latest, sales), /\$2,009/);
 });
-test('renders geography from the live ordersByCountry chart', () => {
-  assert.match(renderSales(latest, sales), /Indonesia/);
+test('renders the geography chart canvas from the live ordersByCountry data', () => {
+  assert.match(renderSales(latest, sales), /ch-geo/);
 });
 test('renders the order ledger from companion data', () => {
   assert.match(renderSales(latest, sales), /#1017/);

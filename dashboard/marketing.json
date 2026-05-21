@@ -9,13 +9,13 @@
     { "emoji": "💡", "name": "Education", "pct": 10, "desc": "What is PM2.5, how HEPA works, airflow explained" }
   ],
   "cadence": [
-    { "day": "Mon", "platform": "🎵 TikTok", "type": "Problem / education hook" },
-    { "day": "Tue", "platform": "📸 Instagram", "type": "Product photo or reel" },
-    { "day": "Wed", "platform": "▶️ YouTube", "type": "Longer explainer or test" },
-    { "day": "Thu", "platform": "🎵 TikTok", "type": "Founder / behind the scenes" },
-    { "day": "Fri", "platform": "📸 Instagram", "type": "Social proof / repost" },
-    { "day": "Sat", "platform": "🌐 All", "type": "Engagement / community" },
-    { "day": "Sun", "platform": "🌐 All", "type": "Engagement / community" }
+    { "day": "Mon", "platform": "TikTok", "type": "Problem / education hook" },
+    { "day": "Tue", "platform": "Instagram", "type": "Product photo or reel" },
+    { "day": "Wed", "platform": "YouTube", "type": "Longer explainer or test" },
+    { "day": "Thu", "platform": "TikTok", "type": "Founder / behind the scenes" },
+    { "day": "Fri", "platform": "Instagram", "type": "Social proof / repost" },
+    { "day": "Sat", "platform": "All", "type": "Engagement / community" },
+    { "day": "Sun", "platform": "All", "type": "Engagement / community" }
   ],
   "cadenceNote": "Every post ends with: \"Comment AIR for a discount sent to your DMs\" — ManyChat picks it up automatically.",
   "ideas": {

@@ -206,3 +206,8 @@ body.review .cbox{display:block}
 .statuspanel .sp-srcs{display:flex;flex-wrap:wrap;gap:0}
 .src.ok{color:var(--good)}
 .buildstamp{color:var(--faint);font-size:11px;margin-top:10px;font-variant-numeric:tabular-nums}
+
+/* ---- unified header wordmark + professional inline icons (replace emoji) ---- */
+.wordmark{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.01em;color:var(--text);white-space:nowrap}
+.eb-ic{flex:none;vertical-align:-3px;color:inherit}
+.drilldown .dd-link .eb-ic{margin-right:3px}

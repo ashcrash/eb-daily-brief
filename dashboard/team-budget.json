@@ -19,10 +19,10 @@
       "details": [["Outcome", "Did not fund — refunded", "urgent"], ["Backers", "20 · $0 realized", ""], ["Email list", "12,926 — cold / dead", ""], ["In Brevo", "Imported but excluded", ""]] }
   ],
   "adChannels": [
-    { "platform": "📘 Meta (FB / IG)", "pct": 0, "color": "var(--eb-blue)", "rows": [["Status", "Not live", ""], ["Pixel + CAPI", "Connected ✓", "ok"], ["Spend", "$0", ""], ["When", "After demand proof", "accent"]] },
-    { "platform": "🎵 TikTok Ads", "pct": 0, "color": "var(--amber)", "rows": [["Status", "Pending approval", "warn"], ["Pixel", "Contract pending", "warn"], ["Spend", "$0", ""], ["Blocker", "Account contract", "urgent"]] },
-    { "platform": "▶️ YouTube Ads", "pct": 0, "color": "var(--eb-blue)", "rows": [["Status", "Not planned yet", ""], ["GA4", "Connected ✓", "ok"], ["Spend", "$0", ""], ["Asset", "169K views · 106K smog hook", "ok"]] },
-    { "platform": "📧 Email (Brevo)", "pct": 80, "color": "#7c8cff", "rows": [["Status", "Sending", "ok"], ["Campaigns", "5 (last #5, 12 May)", ""], ["Cost", "~$0 (free tier)", ""]] }
+    { "platform": "Meta (FB / IG)", "pct": 0, "color": "var(--eb-blue)", "rows": [["Status", "Not live", ""], ["Pixel + CAPI", "Connected ✓", "ok"], ["Spend", "$0", ""], ["When", "After demand proof", "accent"]] },
+    { "platform": "TikTok Ads", "pct": 0, "color": "var(--amber)", "rows": [["Status", "Pending approval", "warn"], ["Pixel", "Contract pending", "warn"], ["Spend", "$0", ""], ["Blocker", "Account contract", "urgent"]] },
+    { "platform": "YouTube Ads", "pct": 0, "color": "var(--eb-blue)", "rows": [["Status", "Not planned yet", ""], ["GA4", "Connected ✓", "ok"], ["Spend", "$0", ""], ["Asset", "169K views · 106K smog hook", "ok"]] },
+    { "platform": "Email (Brevo)", "pct": 80, "color": "#7c8cff", "rows": [["Status", "Sending", "ok"], ["Campaigns", "5 (last #5, 12 May)", ""], ["Cost", "~$0 (free tier)", ""]] }
   ],
   "milestones": [
     { "label": "First revenue", "progress": "earned ✓", "state": "done", "badge": ["green", "Achieved"], "live": "revenue" },

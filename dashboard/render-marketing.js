@@ -1,4 +1,4 @@
-import { esc, freshnessBadge, statusPanel, mountErrorCapture } from './shared-ui.js';
+import { esc, freshnessBadge, statusPanel, mountErrorCapture, logoBlock, svgIcon, mountCharts } from './shared-ui.js';
 
 // ---- live-data helpers (numbers come from latest.json — never hardcoded here) ----
 function chById(latest, id) { return (((latest && latest.channels) || []).find(c => c.id === id)) || {}; }
@@ -25,36 +25,42 @@ function autoBadge(s) {
   const [cls, label] = map[s] || ['muted', s || ''];
   return `<span class="m-badge ${cls}">${esc(label)}</span>`;
 }
+const PILLAR_ICON = { 'Problem': 'alert', 'Product': 'wind', 'Social Proof': 'star', 'Founder': 'mic', 'Education': 'bulb' };
 
 function statCard(label, value, sub, color) {
   return `<div class="m-stat"><div class="m-stat-label">${esc(label)}</div>
     <div class="m-stat-value"${color ? ` style="color:${color}"` : ''}>${esc(value || '—')}</div>
     <div class="m-stat-sub">${esc(sub || '')}</div></div>`;
 }
-function section(title, body) { return `<div class="m-section"><div class="m-section-title">${esc(title)}</div>${body}</div>`; }
+function section(title, body, icon) {
+  return `<div class="m-section"><div class="m-section-title">${icon ? svgIcon(icon) : ''}<span>${esc(title)}</span></div>${body}</div>`;
+}
 
 function pillarsHtml(p) {
   if (!Array.isArray(p) || !p.length) return '';
-  return section('Content Pillars — What to Post', `<div class="m-pillars">${p.map(x =>
-    `<div class="m-pillar"><div class="m-pillar-emoji">${esc(x.emoji)}</div><div class="m-pillar-name">${esc(x.name)}</div>
-     <div class="m-pillar-pct">${esc(x.pct)}%</div><div class="m-pillar-desc">${esc(x.desc)}</div></div>`).join('')}</div>`);
+  const cards = p.map(x =>
+    `<div class="m-pillar"><div class="m-pillar-ic">${svgIcon(PILLAR_ICON[x.name] || 'target', 22)}</div>
+     <div class="m-pillar-name">${esc(x.name)}</div><div class="m-pillar-pct">${esc(x.pct)}%</div>
+     <div class="m-pillar-desc">${esc(x.desc)}</div></div>`).join('');
+  const chart = `<div class="chart-row"><div class="chart-card"><h4>Posting mix</h4><div class="chart-wrap"><canvas id="ch-pillars"></canvas></div></div></div>`;
+  return section('Content pillars — what to post', `${chart}<div class="m-pillars">${cards}</div>`, 'overview');
 }
 function cadenceHtml(c, note) {
   if (!Array.isArray(c) || !c.length) return '';
   const days = c.map(d => `<div class="m-day"><div class="m-day-name">${esc(d.day)}</div>
     <div class="m-day-platform">${esc(d.platform)}</div><div class="m-day-type">${esc(d.type)}</div></div>`).join('');
-  return section('Weekly Posting Cadence — Target', `<div class="m-week">${days}</div>${note ? `<p class="m-note">${esc(note)}</p>` : ''}`);
+  return section('Weekly posting cadence', `<div class="m-week">${days}</div>${note ? `<p class="m-note">${esc(note)}</p>` : ''}`, 'calendar');
 }
 function ideasHtml(ideas) {
   if (!ideas) return '';
   const col = (items, cls, label) => `<div><p class="m-ideas-head ${cls}">${esc(label)}</p><div class="m-idea-list">${(items || []).map(i =>
-    `<div class="m-idea ${cls}"><div class="m-idea-icon">${esc(i.icon)}</div><div><div class="m-idea-text">${esc(i.text)}</div><div class="m-idea-note">${esc(i.note)}</div></div></div>`).join('')}</div></div>`;
-  return section('Upcoming Content Ideas', `<div class="m-ideas">${col(ideas.high, 'high', '🔥 High priority — film first')}${col(ideas.medium, 'medium', '🔵 Medium priority')}</div>`);
+    `<div class="m-idea ${cls}"><div><div class="m-idea-text">${esc(i.text)}</div><div class="m-idea-note">${esc(i.note)}</div></div></div>`).join('')}</div></div>`;
+  return section('Upcoming content ideas', `<div class="m-ideas">${col(ideas.high, 'high', 'High priority — film first')}${col(ideas.medium, 'medium', 'Medium priority')}</div>`, 'bulb');
 }
 function rulesHtml(r) {
   if (!Array.isArray(r) || !r.length) return '';
-  return section('Content Rules — Non-Negotiable', `<div class="m-rules">${r.map((x, i) =>
-    `<div class="m-rule"><div class="m-rule-num">${i + 1}</div>${esc(x)}</div>`).join('')}</div>`);
+  return section('Content rules — non-negotiable', `<div class="m-rules">${r.map((x, i) =>
+    `<div class="m-rule"><div class="m-rule-num">${i + 1}</div>${esc(x)}</div>`).join('')}</div>`, 'check');
 }
 function influencerTable(list, tier) {
   const rows = list.filter(i => i.tier === tier);
@@ -68,10 +74,10 @@ function influencersHtml(m) {
   const t3 = m.tier3 || {};
   const t3card = t3.title ? `<div class="m-card"><h3>${esc(t3.title)}</h3><p class="m-note">${esc(t3.desc || '')}</p>
     <div class="m-tags">${(t3.criteria || []).map(c => `<span class="m-badge accent">${esc(c)}</span>`).join('')}</div></div>` : '';
-  const note = m.influencerNote ? `<div class="m-alert blue"><div>💡</div><div><strong>Untapped channel</strong>${esc(m.influencerNote)}</div></div>` : '';
-  return section('🤝 Influencer Outreach Tracker',
+  const note = m.influencerNote ? `<div class="m-alert blue"><div>${svgIcon('zap')}</div><div><strong>Untapped channel</strong>${esc(m.influencerNote)}</div></div>` : '';
+  return section('Influencer outreach tracker',
     `${note}<p class="m-ideas-head accent">Tier 1 — global gear review (send first)</p>${influencerTable(list, 1)}
-     <p class="m-ideas-head blue">Tier 2 — Asia / urban commuter</p>${influencerTable(list, 2)}${t3card}`);
+     <p class="m-ideas-head blue">Tier 2 — Asia / urban commuter</p>${influencerTable(list, 2)}${t3card}`, 'users');
 }
 function automationsHtml(m, mcContacts) {
   const a = m.automations;
@@ -79,7 +85,7 @@ function automationsHtml(m, mcContacts) {
   const head = `<div class="m-mc"><div class="m-mc-card"><div class="m-mc-label">ManyChat contacts</div><div class="m-mc-value">${esc(mcContacts || '—')}</div><div class="m-mc-sub">live · keyword AIR</div></div></div>`;
   const rows = a.map(x => `<div class="m-row"><div><div class="m-row-name">${esc(x.name)}</div><div class="m-row-desc">${esc(x.desc)}</div></div>
     <div class="m-row-right"><span class="m-dot ${AUTO_DOT[x.status] || 'muted'}"></span>${autoBadge(x.status)}</div></div>`).join('');
-  return section('🤖 ManyChat — Automation Status', `${head}<div class="m-rows">${rows}</div>`);
+  return section('ManyChat — automation status', `${head}<div class="m-rows">${rows}</div>`, 'zap');
 }
 function emailHtml(m, em) {
   const plan = m.emailPlan;
@@ -90,7 +96,7 @@ function emailHtml(m, em) {
     <div class="m-mc-card"><div class="m-mc-label">Sends left (mo)</div><div class="m-mc-value">${esc(sendsLeft || '—')}</div></div></div>`;
   const rows = plan.map(x => `<div class="m-row"><div><div class="m-row-name">${esc(x.name)}</div><div class="m-row-desc">${esc(x.desc)}</div></div>
     <div class="m-row-right">${autoBadge(x.status)}</div></div>`).join('');
-  return section('📧 Brevo Email — Live Stats & Plan', `${live}<div class="m-rows">${rows}</div>`);
+  return section('Brevo email — live stats & plan', `${live}<div class="m-rows">${rows}</div>`, 'mail');
 }
 
 export function renderMarketing(latest, marketing) {
@@ -109,11 +115,11 @@ export function renderMarketing(latest, marketing) {
   ].join('');
 
   const igNote = Array.isArray(ig.notes) && ig.notes.length ? ig.notes[0] : '';
-  const highlight = igNote ? `<div class="m-alert green"><div>✅</div><div><strong>Proven hooks are working — sustain the cadence</strong>${esc(igNote)}</div></div>` : '';
+  const highlight = igNote ? `<div class="m-alert green"><div>${svgIcon('check')}</div><div><strong>Proven hooks are working — sustain the cadence</strong>${esc(igNote)}</div></div>` : '';
 
   return `
     <header class="topbar">
-      <div class="logo"><span class="m-logo">🎯 Easi Breezi</span><span class="wm-sub">Marketing Hub</span></div>
+      ${logoBlock('Marketing Hub')}
       <div class="controls">${freshnessBadge(latest.generatedAt)}</div>
     </header>
     <div class="m-stats">${stats}</div>
@@ -139,5 +145,7 @@ if (typeof document !== 'undefined') {
   ]).then(([latest, marketing, health]) => {
     if (health && health.build) latest.__build = health.build;
     document.getElementById('app').innerHTML = renderMarketing(latest, marketing);
+    const p = (marketing && marketing.pillars) || [];
+    if (p.length) mountCharts([{ id: 'ch-pillars', type: 'doughnut', labels: p.map(x => x.name), data: p.map(x => x.pct) }]);
   }).catch(() => { document.getElementById('app').innerHTML = '<p class="err">Failed to load the marketing hub.</p>'; });
 }

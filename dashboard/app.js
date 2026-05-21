@@ -1,4 +1,4 @@
-import { esc, freshnessBadge, statusPanel, mountErrorCapture } from './shared-ui.js';
+import { esc, freshnessBadge, statusPanel, mountErrorCapture, logoBlock, svgIcon } from './shared-ui.js';
 export { esc };
 
 // RAG performance palette (green on-track / amber caution / red off-target)
@@ -41,10 +41,10 @@ function chartRow(chartIds, charts) {
 
 function topbar(b) {
   return `<header class="topbar">
-    <div class="logo"><img class="logomark" src="${EB_LOGO_SRC}" alt="Easi Breezi" /><span class="wm-sub">Master Dashboard</span></div>
+    ${logoBlock('Master Dashboard')}
     <div class="controls">
       <select class="daypick" aria-label="Choose day"></select>
-      <button class="reviewtoggle" type="button" aria-pressed="false">💬 Review</button>
+      <button class="reviewtoggle" type="button" aria-pressed="false">Review</button>
       <span class="ed num">Ed. ${esc(b.edition)} · ${esc(b.date)}</span>
       ${freshnessBadge(b.generatedAt)}
     </div></header>`;
@@ -141,12 +141,12 @@ function footer(b) {
 // independent of latest.json, so it survives the daily regeneration.
 function detailLinks() {
   const links = [
-    { href: './sales-funnel.html', label: 'Sales & Shopify', icon: '🛒' },
-    { href: './marketing-hub.html', label: 'Marketing Hub', icon: '🎯' },
-    { href: './team-budget.html', label: 'Team & Budget', icon: '👥' },
-    { href: './stats.html', label: 'Dashboard Stats', icon: '📈' }
+    { href: './sales-funnel.html', label: 'Sales & Shopify', icon: 'cart' },
+    { href: './marketing-hub.html', label: 'Marketing Hub', icon: 'target' },
+    { href: './team-budget.html', label: 'Team & Budget', icon: 'users' },
+    { href: './stats.html', label: 'Dashboard Stats', icon: 'bars' }
   ];
-  return `<nav class="drilldown"><span class="dd-label">Drill into detail</span>${links.map(l => `<a class="dd-link" href="${l.href}">${l.icon} ${esc(l.label)}</a>`).join('')}</nav>`;
+  return `<nav class="drilldown"><span class="dd-label">Drill into detail</span>${links.map(l => `<a class="dd-link" href="${l.href}">${svgIcon(l.icon)} ${esc(l.label)}</a>`).join('')}</nav>`;
 }
 
 export function buildBriefHTML(b) {

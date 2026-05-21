@@ -1,4 +1,4 @@
-import { esc } from './shared-ui.js';
+import { esc, logoBlock } from './shared-ui.js';
 
 export function renderStats(data) {
   const views = data && data.views ? data.views : {};
@@ -13,13 +13,14 @@ export function renderStats(data) {
   }
   const viewRows = Object.entries(byPath).sort((a, b) => b[1] - a[1])
     .map(([p, n]) => `<tr><td>${esc(p)}</td><td class="num">${esc(n)}</td></tr>`).join('') || `<tr><td colspan="2">No views recorded yet.</td></tr>`;
-  const errRows = errors.slice(0, 50).map(e => `<tr><td>${esc(e.ts || '')}</td><td>${esc(e.page || '')}</td><td>${esc(e.msg || '')}</td></tr>`).join('') || `<tr><td colspan="3">No client errors. 🎉</td></tr>`;
+  const errRows = errors.slice(0, 50).map(e => `<tr><td>${esc(e.ts || '')}</td><td>${esc(e.page || '')}</td><td>${esc(e.msg || '')}</td></tr>`).join('') || `<tr><td colspan="3">No client errors.</td></tr>`;
   const fbRows = feedback.slice(0, 50).map(f => {
     const notes = Array.isArray(f.comments) ? f.comments.map(c => `${esc(c.item)}: ${esc(c.note)}`).join('; ') : '';
     return `<tr><td>${esc(f.ts || '')}</td><td>${esc(f.page || '')}</td><td>${notes}</td></tr>`;
   }).join('') || `<tr><td colspan="3">No feedback submitted yet.</td></tr>`;
 
   return `
+    <header class="topbar">${logoBlock('Dashboard Stats')}</header>
     <section class="statuspanel"><div class="sp-head">Page views (last 90 days)</div>
       <table class="metrics"><thead><tr><th>Page</th><th>Views</th></tr></thead><tbody>${viewRows}</tbody></table></section>
     <section class="statuspanel"><div class="sp-head">Recent client errors</div>

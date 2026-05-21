@@ -1,4 +1,4 @@
-import { esc, freshnessBadge, statusPanel, mountErrorCapture } from './shared-ui.js';
+import { esc, freshnessBadge, statusPanel, mountErrorCapture, logoBlock, svgIcon, mountCharts } from './shared-ui.js';
 
 function ch(latest, id) { return (((latest && latest.channels) || []).find(c => c.id === id)) || {}; }
 function metric(c, p) { const m = ((c && c.metrics) || []).find(x => new RegExp(p, 'i').test(x.name || '')); return m ? m.value : ''; }
@@ -11,12 +11,19 @@ function statCard(label, value, sub, color) {
     <div class="m-stat-value"${color ? ` style="color:${color}"` : ''}>${esc(value || '—')}</div>
     <div class="m-stat-sub">${esc(sub || '')}</div></div>`;
 }
-function section(title, body) { return `<div class="m-section"><div class="m-section-title">${esc(title)}</div>${body}</div>`; }
-function alertBox(tone, icon, strong, text) { return `<div class="m-alert ${tone}"><div>${icon}</div><div><strong>${esc(strong)}</strong>${esc(text)}</div></div>`; }
+function section(title, body, icon) {
+  return `<div class="m-section"><div class="m-section-title">${icon ? svgIcon(icon) : ''}<span>${esc(title)}</span></div>${body}</div>`;
+}
+function alertBox(tone, icon, strong, text) {
+  return `<div class="m-alert ${tone}"><div>${svgIcon(icon)}</div><div><strong>${esc(strong)}</strong>${esc(text)}</div></div>`;
+}
 function barList(items) {
   return `<div class="m-bars">${items.map(b => `<div class="m-bar-item"><div class="m-bar-name">${esc(b.name)}</div>
     <div class="m-bar-track"><div class="m-bar-fill" style="width:${Math.max(2, Math.round(b.pct))}%${b.color ? `;background:${b.color}` : ''}"></div></div>
-    <div class="m-bar-val"${b.valColor ? ` style="color:${b.valColor}"` : ''}>${esc(b.val)}</div></div>`).join('')}</div>`;
+    <div class="m-bar-val">${esc(b.val)}</div></div>`).join('')}</div>`;
+}
+function chartCard(title, canvasId) {
+  return `<div class="chart-row"><div class="chart-card"><h4>${esc(title)}</h4><div class="chart-wrap"><canvas id="${canvasId}"></canvas></div></div></div>`;
 }
 
 export function renderSales(latest, sales) {
@@ -34,66 +41,59 @@ export function renderSales(latest, sales) {
     statCard('Pre-order code', disc ? disc.value : 'EB25', disc ? (disc.delta || '') : '', 'var(--eb-blue)')
   ].join('');
 
-  // alerts derived from live data
   const alerts = [];
-  if (cvr.delta && /dry|0/.test(cvr.delta)) alerts.push(alertBox('red', '🚨', 'Demand stall', `Conversion ${cvr.value} — ${cvr.delta}. The funnel is fixed; the gap is qualified demand reaching the page (top of funnel, not checkout).`));
-  if (disc && /0 uses|ENDS/i.test(disc.delta || '')) alerts.push(alertBox('warn', '⏳', 'Pre-order code decision', `${disc.value} — ${disc.delta}. Decide: extend, relaunch with a sharper hook, or let it lapse.`));
+  if (cvr.delta && /dry|0/.test(cvr.delta)) alerts.push(alertBox('red', 'trendDown', 'Demand stall', `Conversion ${cvr.value} — ${cvr.delta}. The funnel is fixed; the gap is qualified demand reaching the page (top of funnel, not checkout).`));
+  if (disc && /0 uses|ENDS/i.test(disc.delta || '')) alerts.push(alertBox('warn', 'alert', 'Pre-order code decision', `${disc.value} — ${disc.delta}. Decide: extend, relaunch with a sharper hook, or let it lapse.`));
 
-  // CVR trend (companion) → bars scaled to the max
+  // CVR trend → line chart (data from companion sales.cvrTrend)
   const cv = Array.isArray(sales.cvrTrend) ? sales.cvrTrend : [];
-  const maxCv = Math.max(0.01, ...cv.map(x => x.pct));
-  const cvrBars = cv.length ? section('Conversion rate — 7-week trend',
-    barList(cv.map((x, i) => ({ name: x.week, pct: (x.pct / maxCv) * 100, val: `${x.pct}%`, color: i === cv.length - 1 ? 'var(--good)' : 'var(--eb-blue)', valColor: i === cv.length - 1 ? 'var(--good)' : null })))) : '';
+  const cvrChart = cv.length ? section('Conversion rate — 7-week trend', chartCard('CVR % by week', 'ch-cvr'), 'bars') : '';
 
-  // geography from the LIVE ordersByCountry chart
+  // Geography → doughnut chart (live from ordersByCountry)
   const geo = chart(latest, 'ordersByCountry');
-  const geoBars = geo ? (() => {
-    const max = Math.max(1, ...(geo.datasets[0].data || []));
-    const items = (geo.labels || []).map((l, i) => ({ name: l, pct: ((geo.datasets[0].data[i] || 0) / max) * 100, val: String(geo.datasets[0].data[i] || 0) }));
-    return section('🌍 Paid orders by geography (live)', `<div class="m-card">${barList(items)}</div>`);
-  })() : '';
+  const geoChart = geo ? section('Paid orders by geography (live)', chartCard('Orders by country', 'ch-geo'), 'globe') : '';
 
-  // order ledger (companion snapshot)
+  // Order ledger (companion snapshot)
   const led = Array.isArray(sales.orderLedger) ? sales.orderLedger : [];
-  const ledger = led.length ? section(`📋 Order ledger — snapshot ${sales.updated || ''}`,
+  const ledger = led.length ? section(`Order ledger — snapshot ${sales.updated || ''}`,
     `<div class="m-card"><div class="m-table-wrap"><table class="m-table"><thead><tr><th>Order</th><th>Date</th><th>Location</th><th>Total</th><th>Payment</th><th>Lines</th></tr></thead><tbody>${led.map(o =>
-      `<tr><td class="m-strong">${esc(o.order)}</td><td>${esc(o.date)}</td><td>${esc(o.location)}</td><td>${esc(o.total)}</td><td><span class="m-badge ${o.payment === 'Paid' ? 'green' : 'muted'}">${esc(o.payment)}</span></td><td>${esc(o.lines)}</td></tr>`).join('')}</tbody></table></div></div>`) : '';
+      `<tr><td class="m-strong">${esc(o.order)}</td><td>${esc(o.date)}</td><td>${esc(o.location)}</td><td>${esc(o.total)}</td><td><span class="m-badge ${o.payment === 'Paid' ? 'green' : 'muted'}">${esc(o.payment)}</span></td><td>${esc(o.lines)}</td></tr>`).join('')}</tbody></table></div></div>`, 'cart') : '';
 
-  // units by product (companion)
+  // Units by product (companion) — bar list
   const up = Array.isArray(sales.unitsByProduct) ? sales.unitsByProduct : [];
   const maxU = Math.max(1, ...up.map(x => x.units));
-  const units = up.length ? section('📦 Units sold by product',
-    `<div class="m-card">${barList(up.map(x => ({ name: x.name, pct: (x.units / maxU) * 100, val: String(x.units) })))}</div>`) : '';
+  const units = up.length ? section('Units sold by product',
+    `<div class="m-card">${barList(up.map(x => ({ name: x.name, pct: (x.units / maxU) * 100, val: String(x.units) })))}</div>`, 'box') : '';
 
-  // traffic leak (companion)
+  // Traffic leak (companion)
   const tl = Array.isArray(sales.trafficLeak) ? sales.trafficLeak : [];
-  const leak = tl.length ? section('📣 Where demand is leaking',
-    `<div class="m-card"><div class="m-rows">${tl.map(t => `<div class="m-row"><div class="m-row-name">${esc(t.source)}</div><div class="m-row-right" style="color:${TONE[t.tone] || 'var(--muted)'};font-weight:600">${esc(t.val)}</div></div>`).join('')}</div></div>`) : '';
+  const leak = tl.length ? section('Where demand is leaking',
+    `<div class="m-card"><div class="m-rows">${tl.map(t => `<div class="m-row"><div class="m-row-name">${esc(t.source)}</div><div class="m-row-right" style="color:${TONE[t.tone] || 'var(--muted)'};font-weight:600">${esc(t.val)}</div></div>`).join('')}</div></div>`, 'trendDown') : '';
 
-  // email (live)
+  // Email (live)
   const em = ch(latest, 'email');
-  const email = em.metrics ? section('📧 Email / Brevo (live)',
-    `<div class="m-mc">${(em.metrics || []).map(m => `<div class="m-mc-card"><div class="m-mc-label">${esc(m.name)}</div><div class="m-mc-value">${esc(m.value)}</div><div class="m-stat-sub">${esc(m.delta || '')}</div></div>`).join('')}</div>`) : '';
+  const email = em.metrics ? section('Email / Brevo (live)',
+    `<div class="m-mc">${(em.metrics || []).map(m => `<div class="m-mc-card"><div class="m-mc-label">${esc(m.name)}</div><div class="m-mc-value">${esc(m.value)}</div><div class="m-stat-sub">${esc(m.delta || '')}</div></div>`).join('')}</div>`, 'mail') : '';
 
-  // pixels (companion)
+  // Pixels (companion)
   const px = Array.isArray(sales.pixels) ? sales.pixels : [];
-  const pixels = px.length ? section('🎯 Pixels & tracking',
-    `<div class="m-rows">${px.map(p => `<div class="m-row"><div class="m-row-name"><span class="m-dot ${p.dot}"></span> ${esc(p.name)}</div><div class="m-row-right m-row-desc">${esc(p.status)}</div></div>`).join('')}</div>`) : '';
+  const pixels = px.length ? section('Pixels & tracking',
+    `<div class="m-rows">${px.map(p => `<div class="m-row"><div class="m-row-name"><span class="m-dot ${p.dot}"></span> ${esc(p.name)}</div><div class="m-row-right m-row-desc">${esc(p.status)}</div></div>`).join('')}</div>`, 'target') : '';
 
-  // conversion levers (companion)
+  // Conversion levers (companion)
   const lv = Array.isArray(sales.conversionLevers) ? sales.conversionLevers : [];
-  const levers = lv.length ? section('🔍 Conversion levers',
+  const levers = lv.length ? section('Conversion levers',
     `<div class="m-card"><div class="m-table-wrap"><table class="m-table"><thead><tr><th>Lever</th><th>Action</th></tr></thead><tbody>${lv.map(x =>
-      `<tr><td class="m-row-desc">${esc(x.lever)}</td><td>${esc(x.action)}</td></tr>`).join('')}</tbody></table></div></div>`) : '';
+      `<tr><td class="m-row-desc">${esc(x.lever)}</td><td>${esc(x.action)}</td></tr>`).join('')}</tbody></table></div></div>`, 'sliders') : '';
 
   return `
     <header class="topbar">
-      <div class="logo"><span class="m-logo">🛒 Easi Breezi</span><span class="wm-sub">Sales &amp; Shopify</span></div>
+      ${logoBlock('Sales & Shopify')}
       <div class="controls">${freshnessBadge(latest.generatedAt)}</div>
     </header>
     <div class="m-stats">${stats}</div>
     ${alerts.join('')}
-    ${cvrBars}${geoBars}${ledger}${units}${leak}${email}${pixels}${levers}
+    ${cvrChart}${geoChart}${ledger}${units}${leak}${email}${pixels}${levers}
     ${statusPanel(latest.sources, latest.toolIssues, latest.__build)}
   `;
 }
@@ -107,5 +107,11 @@ if (typeof document !== 'undefined') {
   ]).then(([latest, sales, health]) => {
     if (health && health.build) latest.__build = health.build;
     document.getElementById('app').innerHTML = renderSales(latest, sales);
+    const specs = [];
+    const geo = (latest.charts || []).find(c => c.id === 'ordersByCountry');
+    if (geo) specs.push({ id: 'ch-geo', type: 'doughnut', labels: geo.labels, data: geo.datasets[0].data });
+    const cv = (sales && sales.cvrTrend) || [];
+    if (cv.length) specs.push({ id: 'ch-cvr', type: 'line', labels: cv.map(x => x.week), data: cv.map(x => x.pct) });
+    mountCharts(specs);
   }).catch(() => { document.getElementById('app').innerHTML = '<p class="err">Failed to load the sales funnel.</p>'; });
 }
