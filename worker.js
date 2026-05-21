@@ -6,8 +6,9 @@
 // DASH_PASSWORD MUST be an encrypted Secret, not a plaintext var: Workers Builds
 // runs `wrangler deploy` on every git push, which preserves Secrets but DROPS
 // plaintext vars not declared in wrangler.jsonc (would 503 the next deploy).
-import { basicAuthOk } from './shared/auth.mjs';
+import { basicAuthOk, timingSafeEqualStr } from './shared/auth.mjs';
 import { securityHeaders } from './shared/security.mjs';
+import { parseCookies, wantsHtml, loginPageHTML, COOKIE } from './shared/session.mjs';
 import { buildHealthBody, isTopLevelPath, viewKey, errorKey, feedbackKey, shouldAlert, slackStaleText, slackDownText } from './shared/monitor.mjs';
 
 function json(obj, status = 200, extra = {}) {
@@ -77,14 +78,46 @@ export default {
       return json(buildHealthBody({ latest, build: buildInfo(env) }));
     }
 
-    // 2) Auth gate (fail-closed).
+    // 2) Auth gate (fail-closed). Accepts Basic Auth, a session cookie, OR a
+    //    login-form POST — so it works in mobile in-app browsers that suppress
+    //    the native Basic-Auth dialog. Basic Auth stays intact for curl/desktop.
     const expected = env.DASH_PASSWORD;
     if (!expected) {
       return new Response('Dashboard locked: DASH_PASSWORD is not configured.', {
         status: 503, headers: securityHeaders()
       });
     }
-    if (!basicAuthOk(request.headers.get('Authorization'), expected)) {
+
+    // Login-form submission → set an HttpOnly session cookie, then redirect in.
+    if (request.method === 'POST' && path === '/__login') {
+      let pw = '';
+      try { pw = (await request.formData()).get('password') || ''; } catch { pw = ''; }
+      if (timingSafeEqualStr(pw, expected)) {
+        return new Response(null, {
+          status: 302,
+          headers: {
+            'Location': '/',
+            'Set-Cookie': `${COOKIE}=${encodeURIComponent(expected)}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`,
+            ...securityHeaders()
+          }
+        });
+      }
+      return new Response(loginPageHTML('Incorrect password — try again.'), {
+        status: 401, headers: { 'Content-Type': 'text/html; charset=UTF-8', ...securityHeaders() }
+      });
+    }
+
+    const cookies = parseCookies(request.headers.get('Cookie'));
+    const authed = basicAuthOk(request.headers.get('Authorization'), expected)
+      || timingSafeEqualStr(cookies[COOKIE] || '', expected);
+
+    if (!authed) {
+      // Browser navigation → friendly login form; API/asset/curl → 401 (+ Basic).
+      if (wantsHtml(request.headers.get('Accept'))) {
+        return new Response(loginPageHTML(), {
+          status: 200, headers: { 'Content-Type': 'text/html; charset=UTF-8', ...securityHeaders() }
+        });
+      }
       return new Response('Authentication required.', {
         status: 401,
         headers: {
