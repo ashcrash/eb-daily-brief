@@ -3,10 +3,9 @@
   // worker.js runs FIRST on every request (run_worker_first) to enforce Basic
   // Auth + security headers + observability, then serves ./dashboard via ASSETS.
   // Secrets (set in the CF dashboard, NOT here): DASH_PASSWORD, SLACK_WEBHOOK_URL.
-  // KV binding (observability) is added at deploy setup once the namespace exists:
-  //   "kv_namespaces": [ { "binding": "KV", "id": "<eb-dash-kv id>" } ]
-  // The worker guards every env.KV use, so analytics/errors/feedback/heartbeat
-  // stay safely inert until the binding is present.
+  // KV namespace "eb-dash-kv" bound below (created 2026-05-21) — powers view
+  // analytics, client-error capture, feedback persistence, /stats, cron heartbeat.
+  // The worker still guards every env.KV use (safe if the binding is ever absent).
   "name": "eb-daily-brief",
   "main": "worker.js",
   "compatibility_date": "2025-05-01",
@@ -17,5 +16,8 @@
   },
   "observability": { "enabled": true },
   "version_metadata": { "binding": "CF_VERSION_METADATA" },
-  "triggers": { "crons": ["*/30 * * * *"] }
+  "triggers": { "crons": ["*/30 * * * *"] },
+  "kv_namespaces": [
+    { "binding": "KV", "id": "6593fcb1568e43e4b4b982673192f027" }
+  ]
 }
