@@ -143,7 +143,8 @@ function detailLinks() {
   const links = [
     { href: './sales-funnel.html', label: 'Sales & Shopify', icon: '🛒' },
     { href: './marketing-hub.html', label: 'Marketing Hub', icon: '🎯' },
-    { href: './team-budget.html', label: 'Team & Budget', icon: '👥' }
+    { href: './team-budget.html', label: 'Team & Budget', icon: '👥' },
+    { href: './stats.html', label: 'Dashboard Stats', icon: '📈' }
   ];
   return `<nav class="drilldown"><span class="dd-label">Drill into detail</span>${links.map(l => `<a class="dd-link" href="${l.href}">${l.icon} ${esc(l.label)}</a>`).join('')}</nav>`;
 }
