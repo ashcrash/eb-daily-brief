@@ -1,0 +1,52 @@
+{
+  "updated": "2026-05-21",
+  "note": "Detail + evergreen data for the sales drill-down. Top-line metrics (orders, revenue, CVR, geography, email) come from briefs/latest.json so they never drift. The order ledger is a Shopify snapshot, refreshed when orders change.",
+  "orderLedger": [
+    { "order": "#1017", "date": "10 May", "location": "Australia", "total": "$165.47", "payment": "Paid", "lines": 3 },
+    { "order": "#1016", "date": "6 May", "location": "Vietnam", "total": "$158.40", "payment": "Paid", "lines": 2 },
+    { "order": "#1015", "date": "2 May", "location": "US (CT)", "total": "$137.84", "payment": "Paid", "lines": 4 },
+    { "order": "#1014", "date": "1 May", "location": "Indonesia", "total": "$143.37", "payment": "Paid", "lines": 2 },
+    { "order": "#1013", "date": "28 Apr", "location": "Taiwan", "total": "$143.42", "payment": "Paid", "lines": 2 },
+    { "order": "#1012", "date": "27 Apr", "location": "Spain", "total": "$131.90", "payment": "Paid", "lines": 2 },
+    { "order": "#1011", "date": "18 Apr", "location": "Bali, ID", "total": "$171.84", "payment": "Paid", "lines": 3 },
+    { "order": "#1010", "date": "6 Apr", "location": "US (LA)", "total": "$134.82", "payment": "Paid", "lines": 2 },
+    { "order": "#1009", "date": "5 Apr", "location": "Bali, ID", "total": "$119.82", "payment": "Paid", "lines": 1 },
+    { "order": "#1008", "date": "2 Apr", "location": "US (NH)", "total": "$138.75", "payment": "Paid", "lines": 3 },
+    { "order": "#1007", "date": "30 Mar", "location": "Bali, ID", "total": "$304.13", "payment": "Paid", "lines": 2 },
+    { "order": "#1006", "date": "23 Mar", "location": "US (TX)", "total": "$259.12", "payment": "Paid", "lines": 3 },
+    { "order": "#1005", "date": "21 Mar", "location": "Singapore", "total": "$251.32", "payment": "Expired", "lines": 3 }
+  ],
+  "unitsByProduct": [
+    { "name": "EB Unit", "units": 14 },
+    { "name": "50x HEPA Filter Pack", "units": 8 },
+    { "name": "Universal Handlebar Mounts", "units": 7 },
+    { "name": "10x HEPA Filter Pack", "units": 4 },
+    { "name": "30x HEPA Filter Pack", "units": 1 }
+  ],
+  "cvrTrend": [
+    { "week": "Wk 1", "pct": 0.16 }, { "week": "Wk 2", "pct": 0.81 }, { "week": "Wk 3", "pct": 0.20 },
+    { "week": "Wk 4", "pct": 0.23 }, { "week": "Wk 5", "pct": 0 }, { "week": "Wk 6", "pct": 0.77 }, { "week": "Wk 7", "pct": 1.05 }
+  ],
+  "trafficLeak": [
+    { "source": "Organic Social", "val": "−88%", "tone": "bad" },
+    { "source": "Organic Search", "val": "−89%", "tone": "bad" },
+    { "source": "Direct", "val": "−52%", "tone": "warn" },
+    { "source": "Email click-to-site", "val": "0.6%", "tone": "bad" }
+  ],
+  "pixels": [
+    { "name": "Meta Pixel + CAPI", "status": "Firing", "dot": "green" },
+    { "name": "Google Analytics 4", "status": "Firing", "dot": "green" },
+    { "name": "Microsoft Clarity", "status": "Live", "dot": "green" },
+    { "name": "PushOwl & Brevo", "status": "Connected", "dot": "green" },
+    { "name": "TikTok Pixel", "status": "Contract pending", "dot": "yellow" },
+    { "name": "Instagram MCP", "status": "3/7 tools dark", "dot": "yellow" }
+  ],
+  "conversionLevers": [
+    { "lever": "Top-of-funnel reach (the real gap)", "action": "Rebuild organic social cadence; reuse the proven smog hook (106K views)" },
+    { "lever": "Warm the active list", "action": "Iterate Brevo sends to the active list — real rider tip + EB25 before Friday" },
+    { "lever": "Low trust (new brand / category)", "action": "Founder story, manufacturing transparency, real (non-fabricated) proof" },
+    { "lever": "Objection: \"blowing dirty air in?\"", "action": "HEPA answer up top — H11, ≥95% PM2.5" },
+    { "lever": "Offer decision", "action": "EB25 (25% off) expires Friday — extend, relaunch, or replace" },
+    { "lever": "Behaviour insight", "action": "Clarity is live — watch scroll / rage-clicks on the homepage-LP" }
+  ]
+}

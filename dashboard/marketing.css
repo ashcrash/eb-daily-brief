@@ -81,3 +81,12 @@
 
 @media (max-width:800px){.m-ideas{grid-template-columns:1fr}.m-week{grid-template-columns:repeat(4,1fr)}}
 @media (max-width:560px){.m-week{grid-template-columns:repeat(2,1fr)}.m-stats{grid-template-columns:repeat(2,1fr)}}
+
+/* shared drill-down extras: horizontal bar lists (sales geography, CVR trend, units) */
+.m-bars{display:flex;flex-direction:column;gap:10px}
+.m-bar-item{display:flex;align-items:center;gap:12px}
+.m-bar-name{font-size:12px;color:var(--muted);min-width:110px;text-align:right}
+.m-bar-track{flex:1;background:var(--line);border-radius:4px;height:8px;overflow:hidden}
+.m-bar-fill{height:100%;border-radius:4px;background:var(--eb-blue)}
+.m-bar-val{font-size:12px;font-weight:600;min-width:48px;font-variant-numeric:tabular-nums}
+@media (max-width:560px){.m-bar-name{min-width:88px}}
