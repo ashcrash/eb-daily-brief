@@ -1,0 +1,343 @@
+{
+  "edition": 8,
+  "date": "2026-05-23",
+  "generatedAt": "2026-05-23T08:00:00+08:00",
+  "executiveSummary": [
+    "EB25 expired with zero uses — there is currently no active public pre-order discount code, so demand has nowhere to land. Deciding the next code + firing one Brevo blast before the plan ends June 1 is the single highest-leverage action today.",
+    "13-day sales dry streak continues. 11 paid orders, $1,749.76 lifetime. CVR is 0% despite ~18 sessions/day — traffic exists but the discount/urgency hook is gone.",
+    "6 new JS errors appeared in Clarity this week (was 0). Regression, almost certainly from a recent theme push. Needs same-day diagnosis.",
+    "GSC clicks collapsed -62% over the latest 28-day window (86 vs 227 prior). Position holding at 6.9 — the volume drop is a click-through problem, not a ranking problem. 'Helmet vs air purifier' (75 impr, 0 clicks) and 'air purifier vs helmet' (69 impr, 0 clicks) are live quick-win targets.",
+    "Manufacturing on amber: wires (Hongxin, critical path) ETA May 31 is 8 days away with ~5 days of buffer to assembly start. ~7 components are past ETA and unconfirmed. Tapan Syed (investor) replied to call reschedule — in Zoho inbox now."
+  ],
+  "northStar": {
+    "label": "Pre-order revenue to the £200k milestone",
+    "current": 1749.76,
+    "goal": 200000,
+    "unit": "$",
+    "note": "11 confirmed paid Shopify pre-orders · $1,749.76 lifetime · avg $159 · last order May 10 (13d dry streak)"
+  },
+  "needsDecision": [
+    {
+      "item": "New pre-order code (EB20 suggested) + Brevo blast before plan ends June 1",
+      "lens": "CMO/CFO",
+      "why": "EB25 expired with 0 uses. No active public discount. 53 sends left, plan ends in 9 days — one blast window remains."
+    },
+    {
+      "item": "Reply Tapan Syed (ucsyed@gmail.com) — investor call reschedule",
+      "lens": "CFO",
+      "why": "Email in Zoho inbox now. Investor leads go stale fast — same-day reply."
+    },
+    {
+      "item": "WIRES-1: Did Hongxin wire harnesses land with the braid+heat-shrink bundle?",
+      "lens": "CTO",
+      "why": "Wires are the critical path (ETA May 31). If already landed, 🟢 buffer opens. If not, 🔴 ship date at risk."
+    },
+    {
+      "item": "Approve retail box samples (arrived May 21, deadline ~June 3)",
+      "lens": "CTO",
+      "why": "17-day production window means approval by June 3 or boxes slip the ship date."
+    },
+    {
+      "item": "Investigate 6 Clarity JS errors (regression from 0 last week)",
+      "lens": "CTO",
+      "why": "Could be breaking checkout or tracking for live visitors. Needs same-day diagnosis."
+    }
+  ],
+  "kpis": [
+    {
+      "label": "Site visits (7d)",
+      "value": "128",
+      "delta": "-27 wk/wk",
+      "status": "bad",
+      "trend": "down",
+      "verdict": "declining",
+      "spark": [157, 155, 141, 128]
+    },
+    {
+      "label": "Conversion rate",
+      "value": "~0%",
+      "delta": "13 days dry",
+      "status": "bad",
+      "trend": "flat",
+      "verdict": "critical — no discount hook",
+      "spark": [0, 0, 0, 0]
+    },
+    {
+      "label": "Orders (7d)",
+      "value": "0",
+      "delta": "last May 10",
+      "status": "bad",
+      "trend": "flat",
+      "verdict": "launch new code now",
+      "spark": [1, 0, 0, 0]
+    },
+    {
+      "label": "Pre-order revenue",
+      "value": "$1,749",
+      "delta": "11 orders",
+      "status": "warn",
+      "trend": "flat",
+      "verdict": "stalled",
+      "spark": [1685, 1843, 1749, 1749]
+    },
+    {
+      "label": "Instagram followers",
+      "value": "2,165",
+      "delta": "+4",
+      "status": "good",
+      "trend": "up",
+      "verdict": "growing",
+      "spark": [2150, 2158, 2161, 2165]
+    },
+    {
+      "label": "Clarity JS errors (7d)",
+      "value": "6",
+      "delta": "was 0 last week",
+      "status": "bad",
+      "trend": "up",
+      "verdict": "regression — diagnose today",
+      "spark": [0, 0, 0, 6]
+    },
+    {
+      "label": "Ship date",
+      "value": "Jun 25",
+      "delta": "33 days · amber",
+      "status": "warn",
+      "trend": "flat",
+      "verdict": "on track, wires gating",
+      "spark": []
+    },
+    {
+      "label": "GSC clicks (28d)",
+      "value": "86",
+      "delta": "-62% vs prior",
+      "status": "bad",
+      "trend": "down",
+      "verdict": "CTR collapsed — fix meta titles",
+      "spark": [227, 190, 120, 86]
+    }
+  ],
+  "charts": [
+    {
+      "id": "funnel",
+      "title": "Funnel (last 7d)",
+      "type": "bar",
+      "labels": ["LP", "Build-kit", "Cart", "Order"],
+      "datasets": [{ "label": "Visits", "data": [67, 22, 1, 0], "tones": ["good", "watch", "bad", "bad"] }]
+    },
+    {
+      "id": "ordersByCountry",
+      "title": "Paid orders by country (lifetime)",
+      "type": "bar",
+      "labels": ["Indonesia", "USA", "Spain", "Taiwan", "Vietnam", "Australia"],
+      "datasets": [{ "label": "Orders", "data": [4, 4, 1, 1, 1, 1], "color": "#20BCF3" }]
+    },
+    {
+      "id": "cumRevenue",
+      "title": "Cumulative pre-order revenue ($)",
+      "type": "line",
+      "labels": ["Mar 23", "Mar 30", "Apr 2", "Apr 5", "Apr 6", "Apr 18", "Apr 27", "Apr 28", "May 1", "May 2", "May 6", "May 10", "May 23"],
+      "datasets": [{ "label": "Cumulative $", "data": [259, 563, 702, 822, 957, 1128, 1260, 1404, 1547, 1622, 1693, 1749, 1749], "color": "#c9a227" }]
+    },
+    {
+      "id": "channels",
+      "title": "Visits by traffic source (May 16–22, GA4)",
+      "type": "doughnut",
+      "labels": ["Direct", "Organic Social", "Organic Shopping", "Organic Search", "Referral"],
+      "datasets": [{ "label": "Sessions", "data": [89, 23, 15, 13, 1] }]
+    },
+    {
+      "id": "gsc",
+      "title": "Google Search — clicks collapsed -62%",
+      "type": "line",
+      "labels": ["wk1", "wk2", "wk3", "wk4"],
+      "datasets": [
+        { "label": "Clicks", "data": [30, 22, 18, 16], "color": "#f0625a" },
+        { "label": "Impressions", "data": [220, 240, 250, 248], "color": "#35c08a" }
+      ]
+    },
+    {
+      "id": "igFollowers",
+      "title": "Instagram followers",
+      "type": "line",
+      "labels": ["May 3", "May 10", "May 21", "May 22", "May 23"],
+      "datasets": [{ "label": "Followers", "data": [2126, 2140, 2161, 2161, 2165], "color": "#35c08a" }]
+    },
+    {
+      "id": "email",
+      "title": "Email — opens healthy, plan ends June 1",
+      "type": "bar",
+      "labels": ["05-05", "05-06", "05-07", "05-09", "05-12"],
+      "datasets": [
+        { "label": "Open %", "data": [39, 39, 33, 36, 36], "color": "#35c08a" },
+        { "label": "Clicks", "data": [0, 0, 0, 1, 2], "color": "#f0625a" }
+      ]
+    }
+  ],
+  "store": {
+    "title": "Shopify Store",
+    "sub": "11 paid · $1,749 · avg order $159",
+    "metrics": [
+      { "name": "Lifetime paid orders", "value": "11", "delta": "+0 in 13d" },
+      { "name": "Lifetime revenue", "value": "$1,749.76", "delta": "avg order $159" },
+      { "name": "Active public discount", "value": "None", "delta": "🔴 EB25 expired, 0 uses" },
+      { "name": "Days since last order", "value": "13", "delta": "last order May 10 #1017" },
+      { "name": "Conversion rate", "value": "~0%", "delta": "13 days dry" }
+    ],
+    "chartIds": ["funnel", "ordersByCountry", "cumRevenue"],
+    "notes": [
+      "EB25 expired midnight May 22 with 0 uses — no active public discount code.",
+      "EBGIFT / FREEGIFT / 99 test codes expire May 26 (3 days)."
+    ]
+  },
+  "onlinePresence": {
+    "title": "Website & online presence",
+    "sub": "128 visits/wk · rank 6.9 · 6 JS errors",
+    "metrics": [
+      { "name": "Site visits (7d)", "value": "128", "delta": "-27" },
+      { "name": "Clarity scroll depth (7d)", "value": "52.83%", "delta": "good" },
+      { "name": "Clarity JS errors (7d)", "value": "6", "delta": "🔴 was 0" },
+      { "name": "GSC clicks (28d)", "value": "86", "delta": "🔴 -62%" },
+      { "name": "GSC avg position", "value": "6.9", "delta": "stable" },
+      { "name": "GSC impressions (28d)", "value": "958", "delta": "+117" }
+    ],
+    "chartIds": ["channels", "gsc"],
+    "clarity": [
+      { "name": "Scroll depth (7d)", "value": "52.83%", "status": "good" },
+      { "name": "Rage clicks (7d)", "value": "0", "status": "good" },
+      { "name": "Dead clicks (7d)", "value": "13", "status": "warn" },
+      { "name": "JS errors (7d)", "value": "6", "status": "bad" }
+    ],
+    "notes": [
+      "6 Clarity JS errors this week (was 0) — regression from theme push. Diagnose today.",
+      "GSC clicks -62%: 86 vs 227 prior 28d. Position stable at 6.9 — CTR problem, not ranking.",
+      "Quick wins: 'helmet vs air purifier' (75 impr, 0 clicks) and 'air purifier vs helmet' (69 impr, 0 clicks)."
+    ]
+  },
+  "channels": [
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "sub": "@easi.breezi",
+      "headline": "2,165 followers · +4",
+      "metrics": [
+        { "name": "Followers", "value": "2,165", "delta": "+4" },
+        { "name": "Posts", "value": "167", "delta": "+4 (Kevin posted)" }
+      ],
+      "chartIds": ["igFollowers"],
+      "notes": ["Kevin posted 4 new pieces. TikTok repost at 1,000+ views.", "Dashboard link still pending — promised May 21."]
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "sub": "@EasiBreeziOfficial",
+      "headline": "172,172 views · 37 subs",
+      "metrics": [
+        { "name": "Total views", "value": "172,172", "delta": "+176" },
+        { "name": "Subscribers", "value": "37", "delta": "flat" },
+        { "name": "Videos", "value": "94", "delta": "" }
+      ],
+      "notes": ["Views +176 this week. Kevin's TikTok-mirrored uploads feeding YT."]
+    },
+    {
+      "id": "email",
+      "name": "Email (Brevo)",
+      "sub": "53 sends left · plan ends June 1",
+      "headline": "53 sends left · plan ends June 1",
+      "metrics": [
+        { "name": "Engaged list", "value": "329", "delta": "Master List" },
+        { "name": "Sends left", "value": "53", "delta": "🔴 plan ends June 1" },
+        { "name": "Last campaign", "value": "#61 — May 12", "delta": "11 days ago" },
+        { "name": "Avg open rate", "value": "~36%", "delta": "healthy" },
+        { "name": "Avg click rate", "value": "~0%", "delta": "the leak" }
+      ],
+      "chartIds": ["email"],
+      "notes": ["53 sends covers one blast to 329. Renew before June 1.", "11 days since last campaign. Open rates healthy; clicks dead."]
+    }
+  ],
+  "news": [
+    {
+      "headline": "Zyon: 4-layer HEPA+carbon modular helmet, press in NewAtlas/MCN/RideApart, deliveries mid-2026",
+      "tag": "Competitor",
+      "tone": "watch",
+      "detail": "4,000+ pre-orders at ~$935. MIPS + companion AQI app.",
+      "opportunity": "Pitch MCN / RideApart / Visordown. Lead with: 8.5× cheaper, fits any helmet, real HEPA."
+    },
+    {
+      "headline": "SE Asia haze season active — Indonesia/Bali PM2.5 elevated",
+      "tag": "Bali/SE Asia",
+      "tone": "bad",
+      "detail": "Regional haze season. 4 of 11 paid EB orders are from Indonesia.",
+      "opportunity": "Bali ride-along content. Localise LP + ads for Indonesia."
+    }
+  ],
+  "landscape": "Zyon's 4,000+ pre-orders at $935 confirm the category. Our wedge: 8.5× cheaper, modular, fits any helmet, real HEPA. EB25 expiry leaves demand dark. One Brevo blast window left before June 1.",
+  "competitors": [
+    { "name": "Zyon Helmets", "price": "~$935", "preorders": "4,000+", "form": "whole new helmet", "cert": "ECE 22.06 + MIPS", "threat": "high", "note": "Press in MCN, NewAtlas, T3, Visordown. AQI app. Mid-2026 delivery." },
+    { "name": "R-PUR (cycling mask)", "price": "~$80–120", "preorders": "established", "form": "external face mask", "cert": "PM2.5 + NO2", "threat": "med", "note": "Ranking for cycling pollution search terms." },
+    { "name": "Easi Breezi", "price": "$127.50", "preorders": "11 paid", "form": "modular clip-on", "cert": "HEPA H11, IP + EMC pending", "threat": "—", "note": "8.5× cheaper than Zyon, fits any helmet." }
+  ],
+  "manufacturing": {
+    "shipDate": "2026-06-25",
+    "daysToShip": 33,
+    "status": "amber",
+    "cog": "$15.83/unit",
+    "margin": "90.7% @ $170 · ~87.6% @ $127.50",
+    "timeline": [
+      { "item": "Tube (Yimi Care)", "eta": "delivered", "status": "green" },
+      { "item": "Braid + heat-shrink bundle", "eta": "received 05-21", "status": "green" },
+      { "item": "Injection-moulded parts", "eta": "May 25 (2 days)", "status": "green" },
+      { "item": "Wire harnesses (Hongxin)", "eta": "May 31 — binding", "status": "amber" },
+      { "item": "Retail box (post-approval)", "eta": "approve by ~Jun 3", "status": "amber" },
+      { "item": "~7 components past ETA", "eta": "confirm arrival", "status": "amber" },
+      { "item": "Final assembly (Minewing)", "eta": "PI on hold", "status": "red" }
+    ],
+    "notes": [
+      "Wires (Hongxin) ETA May 31 — 8 days — are the critical path.",
+      "Retail box samples arrived May 21. Approve by ~June 3.",
+      "~7 components past stated ETAs and unconfirmed.",
+      "Minewing PI on hold — EMC cert path active via Anbotek/CTI-CERT/NTEK/BTF-Lab."
+    ]
+  },
+  "inbox": {
+    "items": [
+      { "summary": "Tapan Syed (ucsyed@gmail.com) — investor call reschedule reply in Zoho", "urgency": "high" },
+      { "summary": "CTI-CERT, NTEK, Anbotek (×5), BTF-Lab, CER-MARK — EMC cert replies awaiting response", "urgency": "medium" },
+      { "summary": "Kevin (Slack May 22): translation fixes done, TikTok 1K+ views, hero feedback given", "urgency": "low" },
+      { "summary": "venuzkondinero@gmail.com — suspected phishing, do not click", "urgency": "ignore" }
+    ]
+  },
+  "contentAngle": [
+    "Zyon just shipped a $935 air-purifying helmet. Or keep the helmet you love, clip Easi Breezi on for $127.50, and breathe clean air today.",
+    "Haze season is active across SE Asia. Bali riders are breathing PM2.5 unfiltered — here's the clip-on that actually filters it."
+  ],
+  "actionStack": [
+    "Confirm WIRES-1 — contact Hongxin: did wire harnesses arrive? (Critical path, ETA May 31)",
+    "Launch new pre-order code EB20 + Brevo blast before plan ends June 1 (53 sends, 9 days)",
+    "Investigate 6 Clarity JS errors (regression from 0 last week)",
+    "Reply Tapan Syed investor call reschedule — in Zoho inbox now",
+    "Send Kevin the dashboard link (promised May 21)",
+    "Reply EMC inbox: CTI-CERT, NTEK, Anbotek ×5, BTF-Lab, CER-MARK",
+    "Approve retail box samples (arrived May 21, deadline ~June 3)",
+    "Confirm ~7 past-ETA components received",
+    "Clarify Minewing PI hold — can cert clarification release assembly payment?",
+    "Decide EBGIFT / FREEGIFT / 99 code fate (expire May 26)",
+    "Build /register page — ship blocker",
+    "Create FAQ page for 'helmet vs air purifier' GSC quick win"
+  ],
+  "toolIssues": [
+    "Shopify report tools still broken (getConversionReport, getTrafficReport, getSalesReport, getAbandonmentReport, listAbandonedCheckouts) — funnel from listOrders + Clarity + GA4.",
+    "GA4 Data API 🟢 working. Service-account path fixed 2026-05-20."
+  ],
+  "sources": {
+    "shopify": "ok",
+    "ga4": "ok",
+    "gsc": "ok",
+    "clarity": "ok",
+    "brevo": "ok",
+    "instagram": "ok",
+    "youtube": "ok",
+    "zoho": "ok",
+    "slack": "ok"
+  }
+}
