@@ -405,8 +405,8 @@ nav{position:sticky;top:0;z-index:100;background:rgba(2,5,9,0.97);backdrop-filte
 </head>
 <body>
 
-<!-- AUTH GATE -->
-<div id="authGate">
+<!-- AUTH GATE — hidden; worker.js handles HTTP auth -->
+<div id="authGate" style="display:none">
   <div class="auth-corner tl"></div><div class="auth-corner tr"></div>
   <div class="auth-corner bl"></div><div class="auth-corner br"></div>
   <div class="auth-box">
@@ -1198,12 +1198,8 @@ function initBoot(){
   raf=requestAnimationFrame(frame);
 }
 
-/* ── AUTH ── Worker handles HTTP auth; bypass client gate ── */
-(function(){
-  const gate=document.getElementById('authGate');
-  if(gate) gate.style.display='none';
-  initBoot();
-})();
+/* ── AUTH ── Worker handles HTTP auth; boot directly ── */
+initBoot();
 
 /* ── MUSIC — Live Classic Rock Radio ────────────────────────────────
    Streams SomaFM "Classic Rock Ophilia" (free internet radio, no ads).
